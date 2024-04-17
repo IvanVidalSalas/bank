@@ -15,10 +15,12 @@ public interface Account {
 
     void setCustomer(Set<Customer> customer);
 
+    int getWorkerId();
+
     Set<Worker> getWorker();
     void setWorker(Worker Worker);
     String getaccountType();
     void setaccountType(String accountType);
-    int getbalance();
+    int getBalance();
     void setbalance(int balance);
 }

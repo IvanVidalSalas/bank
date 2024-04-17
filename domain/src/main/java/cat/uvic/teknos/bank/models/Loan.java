@@ -1,5 +1,6 @@
 package cat.uvic.teknos.bank.models;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 public interface Loan {
@@ -7,8 +8,13 @@ public interface Loan {
     void setId(int id);
     Set<Customer> getCustomer();
     void setCustomer(Customer Customer);
-    String getdate();
-    void setdate(String date);
-    String getreturnDate();
+    LocalDate getloandate();
+    void setloandate(String date);
+
+    void setloandate(LocalDate loandate);
+
+    LocalDate getreturnDate();
     void setreturnDate(String returnDate);
+
+    void setreturnDate(LocalDate returnDate);
 }
