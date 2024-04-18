@@ -1,6 +1,8 @@
 package cat.uvic.teknos.bank.file.models;
 
-public class Customer implements cat.uvic.teknos.bank.models.Customer {
+import java.io.Serializable;
+
+public class Customer implements cat.uvic.teknos.bank.models.Customer, Serializable {
     private int id;
     private String firstName;
     private String lastName;

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain-implementations/file/bank.domain-implementations.file.iml" filepath="$PROJECT_DIR$/.idea/modules/domain-implementations/file/bank.domain-implementations.file.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain-implementations/jdbc/bank.domain-implementations.jdbc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/domain-implementations/jdbc/bank.domain-implementations.jdbc.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain-implementations/jdbc/bank.domain-implementations.jdbc.test.iml" filepath="$PROJECT_DIR$/.idea/modules/domain-implementations/jdbc/bank.domain-implementations.jdbc.test.iml" />
     </modules>

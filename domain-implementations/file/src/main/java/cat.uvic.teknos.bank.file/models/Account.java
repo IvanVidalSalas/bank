@@ -3,10 +3,11 @@ package cat.uvic.teknos.bank.file.models;
 import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.Worker;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Account implements cat.uvic.teknos.bank.models.Account {
+public class Account implements cat.uvic.teknos.bank.models.Account, Serializable {
     private int id;
     private int customerId;
     private Set<Customer> customers;

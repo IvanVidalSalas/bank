@@ -54,7 +54,10 @@ public class JdbcCustomerRepository implements CustomerRepository {
 
     @Override
     public void delete(Customer model) {
-
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM CUSTOMER WHERE ID =(?)")){
+            PreparedStatement.setInt(1,model.getId());
+            PreparedStatement.executeUpdate();
+        }
     }
 
     @Override

@@ -2,11 +2,12 @@ package cat.uvic.teknos.bank.file.models;
 
 import cat.uvic.teknos.bank.models.Customer;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Loan implements cat.uvic.teknos.bank.models.Loan {
+public class Loan implements cat.uvic.teknos.bank.models.Loan, Serializable {
     private int id;
     private Set<Customer> customers;
     private LocalDate loanDate;
