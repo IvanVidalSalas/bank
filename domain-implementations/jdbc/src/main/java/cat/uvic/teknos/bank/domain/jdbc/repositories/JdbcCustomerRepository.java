@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.Set;
 
 public class JdbcCustomerRepository implements CustomerRepository {
@@ -28,7 +29,7 @@ public class JdbcCustomerRepository implements CustomerRepository {
 
     private void insert(Customer model) {
         try(PreparedStatement statement = connection.prepareStatement("INSERT INTO CUSTOMER(ID) VALUES(?)", Statement.RETURN_GENERATED_KEYS)){
-            statement.setString(1, model.getId());
+            statement.setString(1, model.getFirstName());
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
             if(keys.next()){
@@ -41,12 +42,10 @@ public class JdbcCustomerRepository implements CustomerRepository {
 
     private void update(Customer model) {
         try(PreparedStatement statement = connection.prepareStatement("UPDATE CUSTOMER VALUES(?)", Statement.RETURN_GENERATED_KEYS)){
-            statement.setString(1, model.getId());
+            statement.setString(1, model.getFirstName());
+            statement.setInt(2, model.getId());
             statement.executeUpdate();
-            var keys = statement.getGeneratedKeys();
-            if(keys.next()){
-                model.setId(keys.getInt(1));
-            }
+
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
@@ -54,20 +53,48 @@ public class JdbcCustomerRepository implements CustomerRepository {
 
     @Override
     public void delete(Customer model) {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM CUSTOMER WHERE ID =(?)")){
-            PreparedStatement.setInt(1,model.getId());
-            PreparedStatement.executeUpdate();
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM CUSTOMER WHERE ID = (?)", Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1,model.getFirstName());
+        try (PreparedStatement statement2 = connection.prepareStatement("DELETE FROM CUSTOMER WHERE ID = (?)")){
+            statement.executeUpdate();
+        }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public Customer get(Integer Id) {
-        return null;
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM CUSTOMER WHERE ID =  (?)", Statement.RETURN_GENERATED_KEYS)) {
+            Customer customer = null;
+            statement.setInt(1, Id);
+            var resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                customer = new cat.uvic.teknos.bank.domain.jdbc.models.Customer();
+                customer.setId(resultSet.getInt("ID"));
+                customer.setFirstName(resultSet.getString("FIRST NAME"));
+            }
+            return customer;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Set<Customer> getAll() {
-        return Set.of();
+        try (PreparedStatement statement = connection.prepareStatement( "SELECT * FROM CUSTOMER", Statement.RETURN_GENERATED_KEYS)) {
+            var customers = new HashSet<Customer>();
+            var resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                var customer = new cat.uvic.teknos.bank.domain.jdbc.models.Customer();
+                customer.setId(resultSet.getInt("ID"));
+                customer.setFirstName(resultSet.getString("FIRST NAME"));
+                customers.add(customer);
+            }
+            return customers;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

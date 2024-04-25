@@ -24,9 +24,9 @@ public class Account implements cat.uvic.teknos.bank.models.Account {
     public int getCustomerId() { return customerid; }
     @Override
     public void setCustomerId(int customerid) { this.customerid = customerid; }
+
     @Override
     public Set<Customer> getCustomer() { return customer; }
-
     @Override
     public void setCustomer(Customer Customer) {
 
@@ -48,7 +48,6 @@ public class Account implements cat.uvic.teknos.bank.models.Account {
     public void setWorker(Worker Worker) {
 
     }
-
 
     @Override
     public String getaccountType() { return accountType; }

@@ -1,36 +1,62 @@
 package cat.uvic.teknos.bank.domain.jdbc.models;
 
-import java.util.Set;
-
-public class Customer implements cat.uvic.teknos.bank.models.Customer{
+public class Customer implements cat.uvic.teknos.bank.models.Customer {
     private int id;
-    private String firstname;
-    private String lastname;
-    private String addres;
+    private String firstName;
+    private String lastName;
+    private String address;
     private String email;
 
-    @Override
-    public int getId() { return id; }
-    @Override
-    public void setId(int id) { this.id = id; }
 
     @Override
-    public String getFirstname() { return firstname; }
-    @Override
-    public void setFirstname(String firstname) { this.firstname = firstname; }
+    public int getId() {
+        return id;
+    }
 
     @Override
-    public String getLastname() { return lastname; }
-    @Override
-    public void setLastname(String lastname) { this.lastname = lastname; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
-    public String getaddres() { return addres; }
-    @Override
-    public void setaddres(String addres) { this.addres = addres; }
+    public String getFirstName() {
+        return firstName;
+    }
 
     @Override
-    public String getemail() { return email; }
+    public void setFirstName(String firstname) {
+        this.firstName = firstname;
+    }
+
     @Override
-    public void setemail(String email) { this.email = email; }
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public void setLastName(String lastname) {
+        this.lastName = lastname;
+    }
+
+    @Override
+    public String getAddress() {
+        return address;
+    }
+
+    @Override
+    public void setAddress(String addres) {
+        this.address = addres;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }
+
