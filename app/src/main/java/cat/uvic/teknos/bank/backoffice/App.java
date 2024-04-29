@@ -3,12 +3,17 @@
  */
 package cat.uvic.teknos.bank.backoffice;
 
-import org.apache.commons.text.WordUtils;
+import cat.uvic.teknos.bank.domain.jdbc.models.JdbcModelFactory;
+import cat.uvic.teknos.bank.domain.jdbc.repositories.JdbcRepositoryFactory;
+import cat.uvic.teknos.bank.models.ModelFactory;
+import cat.uvic.teknos.bank.repositories.RepositoryFactory;
 
 public class App {
 
     public static void main(String[] args) {
-        var backOffice = new BackOffice(System.in, System.out);
+        RepositoryFactory repositoryFactory = new JdbcRepositoryFactory();
+        ModelFactory modelFactory = new JdbcModelFactory();
+        var backOffice = new BackOffice(System.in, System.out, repositoryFactory, modelFactory);
 
         backOffice.start();
     }

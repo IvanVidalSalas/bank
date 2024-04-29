@@ -1,6 +1,7 @@
 package cat.uvic.teknos.bank.backoffice;
 
-import cat.uvic.teknos.bank.backoffice.exceptions.BackOfficeException;
+import cat.uvic.teknos.bank.models.ModelFactory;
+import cat.uvic.teknos.bank.repositories.RepositoryFactory;
 
 import java.io.*;
 
@@ -9,10 +10,15 @@ import static cat.uvic.teknos.bank.backoffice.IOUtils.*;
 public class BackOffice {
     private final BufferedReader in;
     private final PrintStream out;
+    private final RepositoryFactory repositoryFactory;
+    private final ModelFactory modelFactory;
 
-    public  BackOffice (InputStream inputStream, OutputStream outputStream) {
+    public  BackOffice (InputStream inputStream, OutputStream outputStream, RepositoryFactory repositoryFactory, ModelFactory modelFactory) {
         this.in = new BufferedReader(new InputStreamReader(inputStream));
         this.out = new PrintStream(outputStream);
+        this.repositoryFactory = repositoryFactory;
+        this.modelFactory = modelFactory;
+
     }
     public void start () {
         showWelcomeMessage();
@@ -30,7 +36,7 @@ public class BackOffice {
     }
 
     private void manageCustomers() {
-        new CustomerManager(in,out).start();
+        new CustomersManager(in, out, repositoryFactory.getCustomerRepository(), modelFactory).start();
     }
 
     private void showWelcomeMessage() {
@@ -43,5 +49,7 @@ public class BackOffice {
         out.print("2. Account");
         out.print("3. Loan");
         out.print("4. Transaction");
+        out.print("5. Worker");
+        out.print("6. Exit");
     }
 }

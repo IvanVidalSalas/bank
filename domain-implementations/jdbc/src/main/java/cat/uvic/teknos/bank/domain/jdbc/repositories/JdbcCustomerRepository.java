@@ -28,7 +28,7 @@ public class JdbcCustomerRepository implements CustomerRepository {
     }
 
     private void insert(Customer model) {
-        try(PreparedStatement statement = connection.prepareStatement("INSERT INTO CUSTOMER(ID) VALUES(?)", Statement.RETURN_GENERATED_KEYS)){
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO CUSTOMER(ID) VALUES(?)", Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1, model.getFirstName());
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
