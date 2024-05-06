@@ -27,6 +27,17 @@ public class JdbcCustomerRepository implements CustomerRepository {
         }
     }
 
+    private void update(Customer model) {
+        try(PreparedStatement statement = connection.prepareStatement("UPDATE CUSTOMER FIRST_NAME = ? WHERE ID = ?", Statement.RETURN_GENERATED_KEYS)){
+            statement.setString(1, model.getFirstName());
+            statement.setInt(2, model.getId());
+            statement.executeUpdate();
+
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     private void insert(Customer model) {
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO CUSTOMER(ID) VALUES(?)", Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1, model.getFirstName());
@@ -40,16 +51,7 @@ public class JdbcCustomerRepository implements CustomerRepository {
         }
     }
 
-    private void update(Customer model) {
-        try(PreparedStatement statement = connection.prepareStatement("UPDATE CUSTOMER VALUES(?)", Statement.RETURN_GENERATED_KEYS)){
-            statement.setString(1, model.getFirstName());
-            statement.setInt(2, model.getId());
-            statement.executeUpdate();
 
-        } catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void delete(Customer model) {
@@ -101,4 +103,6 @@ public class JdbcCustomerRepository implements CustomerRepository {
     public Customer getByName(String name) {
         return null;
     }
+
+
 }

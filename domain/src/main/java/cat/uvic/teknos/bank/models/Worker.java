@@ -6,11 +6,11 @@ public interface Worker {
     int getId();
     void setId(int id);
     Set<Transaction> getTransaction();
-    void setTransaction(Transaction Transaction);
+    void setTransaction(Set <Transaction> transaction);
     Set<Account> getAccount();
-    void setAccount(Account Account);
-    String getfirstName();
-    void setfirstName(String firstName);
-    String getlastName();
-    void setlastName(String lastName);
+    void setAccount(Set <Account> account);
+    String getFirstName();
+    void setFirstName(String firstName);
+    String getLastName();
+    void setLastName(String lastName);
 }

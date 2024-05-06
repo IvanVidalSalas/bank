@@ -16,8 +16,8 @@ class WorkerRepositoryTest {
         var repository = new WorkerRepository(testDataPath);
         var worker = new Worker();
         worker.setId(1);
-        worker.setfirstName("John");
-        worker.setlastName("Doe");
+        worker.setFirstName("John");
+        worker.setLastName("Doe");
         repository.save(worker);
         assertTrue(worker.getId() > 0);
     }
@@ -27,14 +27,14 @@ class WorkerRepositoryTest {
         var repository = new WorkerRepository(testDataPath);
         var worker = new Worker();
         worker.setId(1);
-        worker.setfirstName("John");
-        worker.setlastName("Doe");
+        worker.setFirstName("John");
+        worker.setLastName("Doe");
         repository.save(worker);
         var updatedWorker = repository.get(worker.getId());
-        updatedWorker.setfirstName("Updated Name");
+        updatedWorker.setFirstName("Updated Name");
         repository.save(updatedWorker);
         var retrievedWorker = repository.get(worker.getId());
-        assertEquals("Updated Name", retrievedWorker.getfirstName());
+        assertEquals("Updated Name", retrievedWorker.getFirstName());
     }
 
     @Test
@@ -42,8 +42,8 @@ class WorkerRepositoryTest {
         var repository = new WorkerRepository(testDataPath);
         var worker = new Worker();
         worker.setId(1);
-        worker.setfirstName("John");
-        worker.setlastName("Doe");
+        worker.setFirstName("John");
+        worker.setLastName("Doe");
         repository.save(worker);
         repository.delete(worker);
         assertNull(repository.get(worker.getId()));
@@ -54,8 +54,8 @@ class WorkerRepositoryTest {
         var repository = new WorkerRepository(testDataPath);
         var worker = new Worker();
         worker.setId(1);
-        worker.setfirstName("John");
-        worker.setlastName("Doe");
+        worker.setFirstName("John");
+        worker.setLastName("Doe");
         repository.save(worker);
         var retrievedWorker = repository.get(worker.getId());
         assertEquals(worker, retrievedWorker);
@@ -66,13 +66,13 @@ class WorkerRepositoryTest {
         var repository = new WorkerRepository(testDataPath);
         var worker1 = new Worker();
         worker1.setId(1);
-        worker1.setfirstName("John");
-        worker1.setlastName("Doe");
+        worker1.setFirstName("John");
+        worker1.setLastName("Doe");
 
         var worker2 = new Worker();
         worker2.setId(2);
-        worker2.setfirstName("Jane");
-        worker2.setlastName("Doe");
+        worker2.setFirstName("Jane");
+        worker2.setLastName("Doe");
 
         repository.save(worker1);
         repository.save(worker2);

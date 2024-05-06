@@ -2,6 +2,9 @@ package cat.uvic.teknos.bank.backoffice;
 
 import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.CustomerRepository;
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.skb.interfaces.document.TableRowStyle;
+import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;

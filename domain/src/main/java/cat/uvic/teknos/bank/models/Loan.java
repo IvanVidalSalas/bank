@@ -6,15 +6,11 @@ import java.util.Set;
 public interface Loan {
     int getId();
     void setId(int id);
-    Set<Customer> getCustomer();
+    Customer getCustomer();
     void setCustomer(Customer Customer);
-    LocalDate getloandate();
-    void setloandate(String date);
+    LocalDate getLoanDate();
+    void setLoanDate(LocalDate loanDate);
+    LocalDate getReturnDate();
+    void setReturnDate(LocalDate returnDate);
 
-    void setloandate(LocalDate loandate);
-
-    LocalDate getreturnDate();
-    void setreturnDate(String returnDate);
-
-    void setreturnDate(LocalDate returnDate);
 }

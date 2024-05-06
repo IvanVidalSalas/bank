@@ -5,22 +5,12 @@ import java.util.Set;
 public interface Account {
     int getId();
     void setId(int id);
-
-    int getCustomerId();
-
-    void setCustomerId(int id);
-
     Set<Customer> getCustomer();
-    void setCustomer(Customer Customer);
-
-    void setCustomer(Set<Customer> customer);
-
-    int getWorkerId();
-
+    void setCustomer(Set <Customer> customer);
     Set<Worker> getWorker();
-    void setWorker(Worker Worker);
-    String getaccountType();
-    void setaccountType(String accountType);
+    void setWorker(Set <Worker> worker);
+    String getAccountType();
+    void setAccountType(String accountType);
     int getBalance();
-    void setbalance(int balance);
+    void setBalance(int balance);
 }

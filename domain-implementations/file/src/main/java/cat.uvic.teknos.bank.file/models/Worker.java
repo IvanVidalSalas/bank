@@ -4,13 +4,12 @@ import cat.uvic.teknos.bank.models.Account;
 import cat.uvic.teknos.bank.models.Transaction;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 public class Worker implements cat.uvic.teknos.bank.models.Worker, Serializable {
     private int id;
-    private Set<Transaction> transactions;
-    private Set<Account> accounts;
+    private Set<Transaction> transaction;
+    private Set<Account> account;
     private String firstName;
     private String lastName;
 
@@ -26,47 +25,37 @@ public class Worker implements cat.uvic.teknos.bank.models.Worker, Serializable 
 
     @Override
     public Set<Transaction> getTransaction() {
-        return transactions;
+        return transaction;
     }
 
     @Override
-    public void setTransaction(Transaction transaction) {
-        if (transactions == null) {
-            transactions = new HashSet<>();
-        }
-        transactions.add(transaction);
-    }
+    public void setTransaction(Set <Transaction> transaction) { this.transaction = transaction; }
 
     @Override
     public Set<Account> getAccount() {
-        return accounts;
+        return account;
     }
 
     @Override
-    public void setAccount(Account account) {
-        if (accounts == null) {
-            accounts = new HashSet<>();
-        }
-        accounts.add(account);
-    }
+    public void setAccount(Set <Account> account) { this.account = account; }
 
     @Override
-    public String getfirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
     @Override
-    public void setfirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     @Override
-    public String getlastName() {
+    public String getLastName() {
         return lastName;
     }
 
     @Override
-    public void setlastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 }

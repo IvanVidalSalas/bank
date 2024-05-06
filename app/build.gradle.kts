@@ -8,6 +8,10 @@ plugins {
 
 dependencies {
     implementation(project(":domain"))
+
+    implementation(project(":domain-implementations:jdbc"))
+
+    implementation("de.vandermeer:asciitable:0.3.2")
 }
 
 application {

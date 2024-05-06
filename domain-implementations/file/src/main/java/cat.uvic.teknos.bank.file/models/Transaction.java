@@ -4,12 +4,11 @@ import cat.uvic.teknos.bank.models.Customer;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 public class Transaction implements cat.uvic.teknos.bank.models.Transaction, Serializable {
     private int id;
-    private Set<Customer> customers;
+    private Set<Customer> customer;
     private String transactionType;
     private int amount;
     private LocalDate transactionDate;
@@ -26,44 +25,37 @@ public class Transaction implements cat.uvic.teknos.bank.models.Transaction, Ser
 
     @Override
     public Set<Customer> getCustomer() {
-        return customers;
+        return customer;
     }
 
     @Override
-    public void setCustomer(Customer customer) {
-        if (customers == null) {
-            customers = new HashSet<>();
-        }
-        customers.add(customer);
-    }
+    public void setCustomer(Set<Customer> customer) { this.customer = customer; }
 
     @Override
-    public String gettransactionType() {
+    public String getTransactionType() {
         return transactionType;
     }
 
     @Override
-    public void settransactionType(String transactionType) {
+    public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
 
     @Override
-    public int getacomunt() {
+    public int getAmount() {
         return amount;
     }
 
     @Override
-    public void setamount(int amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
     @Override
-    public String gettransactionDate() {
-        return transactionDate.toString();
+    public LocalDate getTransactionDate() {
+        return transactionDate;
     }
 
     @Override
-    public void settransactionDate(String transactionDate) {
-        this.transactionDate = LocalDate.parse(transactionDate);
-    }
+    public void setTransactionDate(LocalDate transactionDate) { this.transactionDate = transactionDate; }
 }
