@@ -8,8 +8,9 @@ public class Loan implements cat.uvic.teknos.bank.models.Loan{
 
     private int id;
     private Customer customer;
-    private LocalDate localDate;
+    private LocalDate loanDate;
     private LocalDate returnDate;
+
 
     @Override
     public int getId() { return id; }
@@ -24,10 +25,10 @@ public class Loan implements cat.uvic.teknos.bank.models.Loan{
     public void setCustomer(Customer customer) { this.customer = customer; }
 
     @Override
-    public LocalDate getLoanDate() { return localDate; }
+    public LocalDate getLoanDate() { return loanDate; }
 
     @Override
-    public void setLoanDate(LocalDate loanDate) { this.localDate = loanDate; }
+    public void setLoanDate(LocalDate loanDate) { this.loanDate = loanDate; }
 
     @Override
     public LocalDate getReturnDate() { return returnDate; }

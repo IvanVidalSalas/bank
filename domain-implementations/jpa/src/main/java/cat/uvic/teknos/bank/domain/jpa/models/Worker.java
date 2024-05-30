@@ -2,12 +2,21 @@ package cat.uvic.teknos.bank.domain.jpa.models;
 
 import cat.uvic.teknos.bank.models.Account;
 import cat.uvic.teknos.bank.models.Transaction;
+import jakarta.persistence.*;
 
 import java.util.Set;
 
+@Entity
+@Table(name = "WORKER")
+
 public class Worker implements cat.uvic.teknos.bank.models.Worker{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Set<Transaction> transaction;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable (name = "WORKER_ACCOUNT", joinColumns = {@JoinColumn (name = "WORKER")},
+            inverseJoinColumns = {@JoinColumn(name = "ACCOUNT")}, uniqueConstraints = {@UniqueConstraint(columnNames = {"WORKER", "ACCOUNT"})})
     private Set<Account> account;
     private String firstName;
     private String lastName;

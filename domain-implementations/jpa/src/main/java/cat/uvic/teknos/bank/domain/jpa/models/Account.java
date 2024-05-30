@@ -1,13 +1,18 @@
 package cat.uvic.teknos.bank.domain.jpa.models;
 import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.Worker;
+import jakarta.persistence.*;
 
 import java.util.Set;
 
+@Entity
+@Table(name = "ACCOUNT")
 public class Account implements cat.uvic.teknos.bank.models.Account {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Set<Customer> customer;
+
     private Set<Worker> worker;
     private String accountType;
     private int balance;
@@ -24,6 +29,7 @@ public class Account implements cat.uvic.teknos.bank.models.Account {
     @Override
     public void setCustomer(Set<Customer> customer) { this.customer = customer; }
 
+    @ManyToMany
     @Override
     public Set<Worker> getWorker() { return worker; }
 

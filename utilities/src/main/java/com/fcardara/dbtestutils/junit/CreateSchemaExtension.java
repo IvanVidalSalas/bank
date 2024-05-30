@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import com.fcardara.dbtestutils.db.ScriptExecutor;
 
 public class CreateSchemaExtension implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
+
     private static final Lock lock = new ReentrantLock();
     private static volatile boolean started = false;
 

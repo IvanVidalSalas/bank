@@ -43,6 +43,5 @@ class CustomerTest {
             entityManager.getTransaction().rollback();
         }
 
-
     }
 }

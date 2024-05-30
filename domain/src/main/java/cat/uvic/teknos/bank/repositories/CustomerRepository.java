@@ -17,5 +17,4 @@ public interface CustomerRepository extends Repository<Integer, Customer> {
     @Override
     Set<Customer> getAll();
 
-    Customer getByName(String name);
 }

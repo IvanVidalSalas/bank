@@ -3,49 +3,45 @@ package cat.uvic.teknos.bank.file.models;
 import cat.uvic.teknos.bank.models.Customer;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.Set;
 
 public class Loan implements cat.uvic.teknos.bank.models.Loan, Serializable {
     private int id;
+    private Date loanDate;
+    private Date returnDate;
     private Customer customer;
-    private LocalDate loanDate;
-    private LocalDate returnDate;
 
     @Override
     public int getId() {
         return id;
     }
-
     @Override
     public void setId(int id) {
         this.id = id;
     }
 
     @Override
-    public Customer getCustomer() {
-        return (Customer) customer;
-    }
-
-    @Override
-    public void setCustomer(Customer customer) { this.customer = customer; }
-    @Override
-    public LocalDate getLoanDate() {
+    public Date getLoanDate() {
         return loanDate;
     }
+    @Override
+    public void setLoanDate(Date loanDate) { this.loanDate = loanDate; }
 
     @Override
-    public void setLoanDate(LocalDate loanDate) {
-        this.loanDate = loanDate;
-    }
-
-    @Override
-    public LocalDate getReturnDate() {
+    public Date getReturnDate() {
         return returnDate;
     }
 
     @Override
-    public void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
     }
+
+    @Override
+    public Customer getCustomer() {
+        return customer;
+    }
+    @Override
+    public void setCustomer(Customer customer) { this.customer = customer; }
 }

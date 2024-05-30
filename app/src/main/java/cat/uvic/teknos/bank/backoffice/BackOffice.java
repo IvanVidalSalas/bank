@@ -13,7 +13,7 @@ public class BackOffice {
     private final RepositoryFactory repositoryFactory;
     private final ModelFactory modelFactory;
 
-    public  BackOffice (InputStream inputStream, OutputStream outputStream, RepositoryFactory repositoryFactory, ModelFactory modelFactory) {
+    public BackOffice (InputStream inputStream, OutputStream outputStream, RepositoryFactory repositoryFactory, ModelFactory modelFactory) {
         this.in = new BufferedReader(new InputStreamReader(inputStream));
         this.out = new PrintStream(outputStream);
         this.repositoryFactory = repositoryFactory;

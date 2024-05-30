@@ -26,9 +26,4 @@ public class JpaCustomerRepository implements CustomerRepository {
     public Set<Customer> getAll() {
         return Set.of();
     }
-
-    @Override
-    public Customer getByName(String name) {
-        return null;
-    }
 }

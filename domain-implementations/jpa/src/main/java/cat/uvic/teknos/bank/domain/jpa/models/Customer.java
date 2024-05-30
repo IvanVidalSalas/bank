@@ -2,6 +2,7 @@ package cat.uvic.teknos.bank.domain.jpa.models;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "CUSTOMER")
 
@@ -18,6 +19,7 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer {
     private String address;
     @Column(name = "EMAIL")
     private String email;
+
 
 
     @Override
