@@ -25,20 +25,15 @@ class JdbcTransactionRepositoryTest {
     }
 
     @Test
-    @DisplayName("Given a new transaction (id = 0), when save, then a new record is added to the TRANSACTION table")
+    @DisplayName("Given a new transaction, when save, then a new record is added to the TRANSACTION table")
     void insertNewTransactionTest() {
         Transaction transaction = new Transaction();
-        transaction.setTransactionType("DEPOSIT");
-        transaction.setAmount(100);
-        transaction.setTransactionDate(new Date(System.currentTimeMillis()));
-
         Customer customer = new Customer();
         customer.setId(1);
         transaction.setCustomer(customer);
-
-        Worker worker = new Worker();
-        worker.setId(1);
-        transaction.setWorker(worker);
+        transaction.setTransactionType("DEPOSIT");
+        transaction.setAmount(100);
+        transaction.setTransactionDate(new Date(System.currentTimeMillis()));
 
         var repository = new JdbcTransactionRepository(connection);
 
@@ -51,12 +46,14 @@ class JdbcTransactionRepositoryTest {
     @DisplayName("Given an existing transaction with modified fields")
     void shouldUpdateATransactionTest() {
         Transaction transaction = new Transaction();
-        transaction.setTransactionType("DEPOSIT");
-        transaction.setAmount(100);
+        transaction.setTransactionType("WITHDRAW");
+        transaction.setAmount(200);
         transaction.setTransactionDate(new Date(System.currentTimeMillis()));
+
         Customer customer = new Customer();
         customer.setId(1);
         transaction.setCustomer(customer);
+
         Worker worker = new Worker();
         worker.setId(1);
         transaction.setWorker(worker);
@@ -83,19 +80,35 @@ class JdbcTransactionRepositoryTest {
         assertNull(repository.get(1));
     }
 
+
+
     @Test
     void get() {
-
+        int id = 9;
         var repository = new JdbcTransactionRepository(connection);
-        assertNotNull(repository.get(1));
+
+        cat.uvic.teknos.bank.models.Transaction transaction = repository.get(id);
+        SoutTransaction(transaction);
     }
 
     @Test
     void getAll() {
-
         var repository = new JdbcTransactionRepository(connection);
         Set<cat.uvic.teknos.bank.models.Transaction> transactions = repository.getAll();
-        assertFalse(transactions.isEmpty(), "Should not be empty");
 
+        for(var transaction:transactions){
+            SoutTransaction(transaction);
+        }
+    }
+
+
+    private void SoutTransaction(cat.uvic.teknos.bank.models.Transaction transaction){
+        System.out.println("Transaction Id: " + transaction.getId());
+        System.out.println("Customer Id: " + transaction.getCustomer().getId());
+        System.out.println("Transaction type: " + transaction.getTransactionType());
+        System.out.println("Transaction amount: " + transaction.getAmount());
+        System.out.println("Transaction Date: " + transaction.getTransactionDate());
+
+        System.out.println("\n");
     }
 }

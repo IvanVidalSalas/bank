@@ -3,7 +3,8 @@ package cat.uvic.teknos.bank.domain.jpa.models;
 import cat.uvic.teknos.bank.models.Customer;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.sql.Date;
+
 
 @Entity
 @Table(name = "LOAN")
@@ -16,9 +17,9 @@ public class Loan implements cat.uvic.teknos.bank.models.Loan{
     @JoinColumn(name = "CUSTOMER")
     private Customer customer;
     @Column(name = "LOAN_DATE")
-    private LocalDate loanDate;
+    private Date loanDate;
     @Column(name = "RETURN_DATE")
-    private LocalDate returnDate;
+    private Date returnDate;
 
     @Override
     public int getId() { return id; }
@@ -33,15 +34,15 @@ public class Loan implements cat.uvic.teknos.bank.models.Loan{
     public void setCustomer(Customer customer) { this.customer = customer; }
 
     @Override
-    public LocalDate getLoanDate() { return loanDate; }
+    public Date getLoanDate() { return loanDate; }
 
     @Override
-    public void setLoanDate(LocalDate loanDate) { this.loanDate = loanDate; }
+    public void setLoanDate(Date loanDate) { this.loanDate = loanDate; }
 
     @Override
-    public LocalDate getReturnDate() { return returnDate; }
+    public Date getReturnDate() { return returnDate; }
 
     @Override
-    public void setReturnDate(LocalDate returnDate) { this.returnDate = returnDate; }
+    public void setReturnDate(Date returnDate) { this.returnDate = returnDate; }
 
 }

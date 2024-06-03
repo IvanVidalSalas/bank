@@ -37,20 +37,14 @@ public class JdbcRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
-    public AccountRepository getAccountRepository() {
-        return new JdbcAccountRepository(connection);
-    }
+    public AccountRepository getAccountRepository() { return null; }
 
     @Override
     public LoanRepository getLoanRepository() { return new JdbcLoanRepository(connection); }
 
     @Override
-    public TransactionRepository getTransactionRepository() {
-        return new JdbcTransactionRepository(connection);
-    }
+    public TransactionRepository getTransactionRepository() { return new JdbcTransactionRepository(connection); }
 
     @Override
-    public WorkerRepository getWorkerRepository() {
-        return new JdbcWorkerRepository(connection);
-    }
+    public WorkerRepository getWorkerRepository() { return null; }
 }

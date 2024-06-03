@@ -78,4 +78,6 @@ public class CustomersManager {
         String render = asciiTable.render();
         System.out.println(render);
     }
+
+
 }

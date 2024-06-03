@@ -57,7 +57,7 @@ class JdbcLoanRepositoryTest {
     @Test
     void delete() {
         Loan loan = new Loan();
-        loan.setId(1);
+        loan.setCustomer(loan.getCustomer());
 
         var repository = new JdbcLoanRepository(connection);
         repository.delete(loan);
@@ -74,9 +74,7 @@ class JdbcLoanRepositoryTest {
     @Test
     void getAll() {
         var repository = new JdbcLoanRepository(connection);
-
         Set<cat.uvic.teknos.bank.models.Loan> loans = repository.getAll();
-
         assertFalse(loans.isEmpty(), "Should not be empty");
     }
 }

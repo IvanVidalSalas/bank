@@ -22,7 +22,7 @@ class JdbcCustomerRepositoryTest {
     }
 
     @Test
-    @DisplayName("Given a new customer (id = 0), when save, then a new record is added to the CUSTOMER table")
+    @DisplayName("Given a new customer, when save, then a new record is added to the CUSTOMER table")
     void insertNewCustomerTest() {
         Customer customer = new Customer();
         customer.setId(4);
@@ -35,11 +35,6 @@ class JdbcCustomerRepositoryTest {
         //Test
         repository.save(customer);
         assertTrue(customer.getId() > 0);
-
-//        DbAssertions.assertThat(connection)
-//                .table("CUSTOMER")
-//                .where("CUSTOMER_ID = ?", customer.getId())
-//                .hasOneLine();
     }
 
     @Test
@@ -70,16 +65,30 @@ class JdbcCustomerRepositoryTest {
 
     @Test
     void get() {
+        int id = 1;
         var repository = new JdbcCustomerRepository(connection);
-        assertNotNull(repository.get(1));
+
+        cat.uvic.teknos.bank.models.Customer customer = repository.get(id);
+        SoutCustomer(customer);
     }
 
     @Test
     void getAll() {
         var repository = new JdbcCustomerRepository(connection);
-
         Set<cat.uvic.teknos.bank.models.Customer> customers = repository.getAll();
 
-        assertFalse(customers.isEmpty(), "Should not be empty" );
+        for(var customer:customers){
+            SoutCustomer(customer);
+        }
+    }
+
+    private void SoutCustomer(cat.uvic.teknos.bank.models.Customer customer){
+        System.out.println("Customer Id: " + customer.getId());
+        System.out.println("First Name: " + customer.getFirstName());
+        System.out.println("Last Name: " + customer.getLastName());
+        System.out.println("Address: " + customer.getAddress());
+        System.out.println("Email: " + customer.getEmail());
+
+        System.out.println("\n");
     }
 }

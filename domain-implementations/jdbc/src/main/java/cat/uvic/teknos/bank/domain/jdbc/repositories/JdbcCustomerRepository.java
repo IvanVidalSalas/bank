@@ -28,7 +28,7 @@ public class JdbcCustomerRepository implements CustomerRepository {
     }
 
     private void update(Customer model) {
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE CUSTOMER SET FIRST_NAME = ?,LAST_NAME = ?,ADDRES = ?,EMAIL = ? WHERE CUSTOMER_ID = ?", Statement.RETURN_GENERATED_KEYS)){
+        try (PreparedStatement statement = connection.prepareStatement("UPDATE CUSTOMER SET FIRST_NAME = ?,LAST_NAME = ?,ADDRESS = ?,EMAIL = ? WHERE CUSTOMER_ID = ?", Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1, model.getFirstName());
             statement.setString(2, model.getLastName());
             statement.setString(3, model.getAddress());
@@ -42,12 +42,11 @@ public class JdbcCustomerRepository implements CustomerRepository {
     }
 
     private void insert(Customer model) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO CUSTOMER(CUSTOMER_ID, FIRST_NAME, LAST_NAME, ADDRES, EMAIL) VALUES(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)){
-            statement.setInt(1, model.getId());
-            statement.setString(2, model.getFirstName());
-            statement.setString(3, model.getLastName());
-            statement.setString(4, model.getAddress());
-            statement.setString(5, model.getEmail());
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO CUSTOMER(FIRST_NAME, LAST_NAME, ADDRESS, EMAIL) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS)){
+            statement.setString(1, model.getFirstName());
+            statement.setString(2, model.getLastName());
+            statement.setString(3, model.getAddress());
+            statement.setString(4, model.getEmail());
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
             if(keys.next()){

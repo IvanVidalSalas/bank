@@ -31,14 +31,13 @@ public class JdbcTransactionRepository implements TransactionRepository {
 
     private void update(Transaction model) {
         try (PreparedStatement statement = connection.prepareStatement(
-                "UPDATE TRANSACTION SET TRANSACTION_TYPE = ?, AMOUNT = ?, TRANSACTION_DATE = ?, CUSTOMER_ID = ?, WORKER_ID = ? WHERE TRANSACTION_ID = ?",
+                "UPDATE TRANSACTION SET TRANSACTION_TYPE = ?, AMOUNT = ?, TRANSACTION_DATE = ?, CUSTOMER_ID = ? WHERE TRANSACTION_ID = ?",
                 Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, model.getTransactionType());
             statement.setInt(2, model.getAmount());
             statement.setDate(3, model.getTransactionDate());
             statement.setInt(4, model.getCustomer().getId());
-            statement.setInt(5, model.getWorker().getId());
-            statement.setInt(6, model.getId());
+            statement.setInt(5, model.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -48,13 +47,13 @@ public class JdbcTransactionRepository implements TransactionRepository {
 
     private void insert(Transaction model) {
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO TRANSACTION(TRANSACTION_TYPE, AMOUNT, TRANSACTION_DATE, CUSTOMER_ID, WORKER_ID) VALUES(?,?,?,?,?)",
+                "INSERT INTO TRANSACTION(TRANSACTION_TYPE, AMOUNT, TRANSACTION_DATE, CUSTOMER_ID) VALUES(?,?,?,?)",
                 Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, model.getTransactionType());
             statement.setInt(2, model.getAmount());
             statement.setDate(3, model.getTransactionDate());
             statement.setInt(4, model.getCustomer().getId());
-            statement.setInt(5, model.getWorker().getId());
+
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
             if (keys.next()) {
@@ -78,25 +77,19 @@ public class JdbcTransactionRepository implements TransactionRepository {
 
     @Override
     public Transaction get(Integer id) {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM TRANSACTION WHERE TRANSACTION_ID = ?", Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM TRANSACTION WHERE TRANSACTION_ID = (?)", Statement.RETURN_GENERATED_KEYS)) {
             Transaction transaction = null;
             statement.setInt(1, id);
             var resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 transaction = new cat.uvic.teknos.bank.domain.jdbc.models.Transaction();
                 transaction.setId(resultSet.getInt("TRANSACTION_ID"));
-                transaction.setTransactionType(resultSet.getString("TRANSACTION_TYPE"));
-                transaction.setAmount(resultSet.getInt("AMOUNT"));
-                transaction.setTransactionDate(resultSet.getDate("TRANSACTION_DATE"));
-
                 var customer = new Customer();
                 customer.setId(resultSet.getInt("CUSTOMER_ID"));
                 transaction.setCustomer(customer);
-
-                var worker = new Worker();
-                worker.setId(resultSet.getInt("WORKER_ID"));
-                transaction.setWorker(worker);
+                transaction.setTransactionType(resultSet.getString("TRANSACTION_TYPE"));
+                transaction.setAmount(resultSet.getInt("AMOUNT"));
+                transaction.setTransactionDate(resultSet.getDate("TRANSACTION_DATE"));
             }
             return transaction;
         } catch (SQLException e) {
@@ -120,10 +113,6 @@ public class JdbcTransactionRepository implements TransactionRepository {
                 var customer = new Customer();
                 customer.setId(resultSet.getInt("CUSTOMER_ID"));
                 transaction.setCustomer(customer);
-
-                var worker = new Worker();
-                worker.setId(resultSet.getInt("WORKER_ID"));
-                transaction.setWorker(worker);
 
                 transactions.add(transaction);
             }

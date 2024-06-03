@@ -12,7 +12,7 @@ public interface CustomerRepository extends Repository<Integer, Customer> {
     void delete(Customer model);
 
     @Override
-    Customer get(Integer Id);
+    Customer get(Integer id);
 
     @Override
     Set<Customer> getAll();
