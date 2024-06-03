@@ -1,8 +1,6 @@
 package cat.uvic.teknos.bank.domain.jdbc.repositories;
 
-import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.Loan;
-import cat.uvic.teknos.bank.repositories.CustomerRepository;
 import cat.uvic.teknos.bank.repositories.LoanRepository;
 
 
@@ -31,8 +29,8 @@ public class JdbcLoanRepository implements LoanRepository {
     private void update(Loan model) {
         try (PreparedStatement statement = connection.prepareStatement("UPDATE LOAN SET CUSTOMER_ID = ?, LOAN_DATE = ?, RETURN_DATE = ? WHERE LOAN_ID = ?", Statement.RETURN_GENERATED_KEYS)){
             statement.setInt(1, model.getCustomer().getId());
-            statement.setDate(2, Date.valueOf(model.getLoanDate()));
-            statement.setDate(3, Date.valueOf(model.getReturnDate()));
+            statement.setDate(2, model.getLoanDate());
+            statement.setDate(3, model.getReturnDate());
             statement.setInt(4, model.getId());
 
             statement.executeUpdate();
@@ -45,8 +43,8 @@ public class JdbcLoanRepository implements LoanRepository {
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO LOAN(LOAN_ID, CUSTOMER_ID, LOAN_DATE, RETURN_DATE) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS)){
             statement.setInt(1, model.getId());
             statement.setInt(2, model.getCustomer().getId());
-            statement.setDate(3, Date.valueOf(model.getLoanDate()));
-            statement.setDate(4, Date.valueOf(model.getReturnDate()));
+            statement.setDate(3, model.getLoanDate());
+            statement.setDate(4, model.getReturnDate());
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
             if(keys.next()){
@@ -78,10 +76,11 @@ public class JdbcLoanRepository implements LoanRepository {
             if (resultSet.next()) {
                 loan = new cat.uvic.teknos.bank.domain.jdbc.models.Loan();
                 loan.setId(resultSet.getInt("LOAN_ID"));
-                Customer customer = CustomerRepository.get(resultSet.getInt("CUSTOMER_ID"));
+                var customer = new cat.uvic.teknos.bank.domain.jdbc.models.Customer();
+                customer.setId(resultSet.getInt("CUSTOMER_ID"));
                 loan.setCustomer(customer);
-                loan.setLoanDate(resultSet.getDate("LOAN_DATE").toLocalDate());
-                loan.setLoanDate(resultSet.getDate("RETURN_DATE").toLocalDate());
+                loan.setLoanDate(resultSet.getDate("LOAN_DATE"));
+                loan.setLoanDate(resultSet.getDate("RETURN_DATE"));
 
             }
             return loan;
@@ -98,10 +97,11 @@ public class JdbcLoanRepository implements LoanRepository {
             while (resultSet.next()) {
                 var loan = new cat.uvic.teknos.bank.domain.jdbc.models.Loan();
                 loan.setId(resultSet.getInt("LOAN_ID"));
-                Customer customer = CustomerRepository.get(resultSet.getInt("CUSTOMER_ID"));
+                var customer = new cat.uvic.teknos.bank.domain.jdbc.models.Customer();
+                customer.setId(resultSet.getInt("CUSTOMER_ID"));
                 loan.setCustomer(customer);
-                loan.setLoanDate(resultSet.getDate("LOAN_DATE").toLocalDate());
-                loan.setLoanDate(resultSet.getDate("RETURN_DATE").toLocalDate());
+                loan.setLoanDate(resultSet.getDate("LOAN_DATE"));
+                loan.setLoanDate(resultSet.getDate("RETURN_DATE"));
                 loans.add(loan);
             }
             return loans;

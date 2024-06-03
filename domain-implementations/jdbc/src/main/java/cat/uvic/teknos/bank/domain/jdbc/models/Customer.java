@@ -1,61 +1,54 @@
 package cat.uvic.teknos.bank.domain.jdbc.models;
 
-public class Customer implements cat.uvic.teknos.bank.models.Customer {
+import cat.uvic.teknos.bank.models.Loan;
+import cat.uvic.teknos.bank.models.Transaction;
 
+import java.util.Set;
+
+public class Customer implements cat.uvic.teknos.bank.models.Customer {
     private int id;
     private String firstName;
     private String lastName;
     private String address;
     private String email;
+    private Loan loan;
+    private Set<Transaction> transactions;
 
     @Override
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    @Override
+    public void setId(int id) { this.id = id; }
 
     @Override
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getFirstName() { return firstName; }
+    @Override
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
     @Override
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getLastName() { return lastName; }
+    @Override
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
     @Override
-    public void setFirstName(String firstname) {
-        this.firstName = firstname;
-    }
+    public String getAddress() { return address; }
+    @Override
+    public void setAddress(String address) { this.address = address; }
 
     @Override
-    public String getLastName() {
-        return lastName;
-    }
+    public String getEmail() { return email; }
+    @Override
+    public void setEmail(String email) { this.email = email; }
 
     @Override
-    public void setLastName(String lastname) {
-        this.lastName = lastname;
-    }
+    public cat.uvic.teknos.bank.models.Loan getLoan() { return loan; }
 
     @Override
-    public String getAddress() {
-        return address;
-    }
+    public void setLoan(Loan loan) { this.loan = loan; }
 
     @Override
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    public Set<Transaction> getTransaction() { return transactions; }
 
     @Override
-    public String getEmail() {
-        return email;
-    }
-
-    @Override
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setTransaction(Set<Transaction> transaction) { this.transactions = transaction; }
 }
 

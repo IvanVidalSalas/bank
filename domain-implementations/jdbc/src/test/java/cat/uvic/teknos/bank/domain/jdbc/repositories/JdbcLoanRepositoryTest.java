@@ -25,12 +25,12 @@ class JdbcLoanRepositoryTest {
 
     @Test
     @DisplayName("Given a new loan, when save, then a new record is added to the LOAN table")
-    void insertNewLoanTest() throws SQLException {
+    void insertNewLoanTest() {
         Loan loan = new Loan();
         loan.setId(1);
         loan.setCustomer(loan.getCustomer());
-        loan.setLoanDate(LocalDate.now());
-        loan.setReturnDate(LocalDate.now().plusMonths(1)); //
+        loan.setLoanDate(loan.getLoanDate());
+        loan.setReturnDate(loan.getReturnDate()); //
 
         var repository = new JdbcLoanRepository(connection);
 
@@ -41,14 +41,14 @@ class JdbcLoanRepositoryTest {
     }
     @Test
     @DisplayName("Given an existing Loan with modified fields")
-    void shouldUpdateALoanTest() throws SQLException {
+    void shouldUpdateALoanTest() {
         Loan loan = new Loan();
-        loan.setId(2);
+        loan.setId(1);
         loan.setCustomer(loan.getCustomer());
-        loan.setLoanDate(LocalDate.now());
-        loan.setReturnDate(LocalDate.now().plusMonths(2));
+        loan.setLoanDate(loan.getLoanDate());
+        loan.setReturnDate(loan.getReturnDate());
 
-        var repository = new JdbcCustomerRepository(connection);
+        var repository = new JdbcLoanRepository(connection);
 
         repository.save(loan);
         assertTrue(loan.getId() > 0);

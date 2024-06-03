@@ -58,14 +58,11 @@ public class JdbcCustomerRepository implements CustomerRepository {
         }
     }
 
-
     @Override
     public void delete(Customer model) {
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM CUSTOMER WHERE CUSTOMER_ID = (?)", Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, model.getId());
-        try (PreparedStatement statement2 = connection.prepareStatement("DELETE FROM CUSTOMER WHERE CUSTOMER_ID = (?)")){
-            statement.executeUpdate();
-        }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -73,7 +70,7 @@ public class JdbcCustomerRepository implements CustomerRepository {
 
     @Override
     public Customer get(Integer Id) {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM CUSTOMER WHERE CUSTOMER_ID =  (?)", Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM CUSTOMER WHERE CUSTOMER_ID = (?)", Statement.RETURN_GENERATED_KEYS)) {
             Customer customer = null;
             statement.setInt(1, Id);
             var resultSet = statement.executeQuery();

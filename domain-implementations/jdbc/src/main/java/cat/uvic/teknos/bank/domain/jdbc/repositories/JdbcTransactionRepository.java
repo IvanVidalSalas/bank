@@ -2,6 +2,8 @@ package cat.uvic.teknos.bank.domain.jdbc.repositories;
 
 import cat.uvic.teknos.bank.models.Transaction;
 import cat.uvic.teknos.bank.repositories.TransactionRepository;
+import cat.uvic.teknos.bank.domain.jdbc.models.Customer;
+import cat.uvic.teknos.bank.domain.jdbc.models.Worker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,43 +30,35 @@ public class JdbcTransactionRepository implements TransactionRepository {
     }
 
     private void update(Transaction model) {
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE CUSTOMER SET FIRST_NAME = ?,LAST_NAME = ?,ADDRES = ?,EMAIL = ? WHERE CUSTOMER_ID = ?", Statement.RETURN_GENERATED_KEYS)){
-            statement.setString(1, model.getFirstName());
-            statement.setString(2, model.getLastName());
-            statement.setString(3, model.getAddress());
-            statement.setString(4, model.getEmail());
-            statement.setInt(5, model.getId());
+        try (PreparedStatement statement = connection.prepareStatement(
+                "UPDATE TRANSACTION SET TRANSACTION_TYPE = ?, AMOUNT = ?, TRANSACTION_DATE = ?, CUSTOMER_ID = ?, WORKER_ID = ? WHERE TRANSACTION_ID = ?",
+                Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, model.getTransactionType());
+            statement.setInt(2, model.getAmount());
+            statement.setDate(3, model.getTransactionDate());
+            statement.setInt(4, model.getCustomer().getId());
+            statement.setInt(5, model.getWorker().getId());
+            statement.setInt(6, model.getId());
 
             statement.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void insert(Transaction model) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO CUSTOMER(CUSTOMER_ID, FIRST_NAME, LAST_NAME, ADDRES, EMAIL) VALUES(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)){
-            statement.setInt(1, model.getId());
-            statement.setString(2, model.getFirstName());
-            statement.setString(3, model.getLastName());
-            statement.setString(4, model.getAddress());
-            statement.setString(5, model.getEmail());
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO TRANSACTION(TRANSACTION_TYPE, AMOUNT, TRANSACTION_DATE, CUSTOMER_ID, WORKER_ID) VALUES(?,?,?,?,?)",
+                Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, model.getTransactionType());
+            statement.setInt(2, model.getAmount());
+            statement.setDate(3, model.getTransactionDate());
+            statement.setInt(4, model.getCustomer().getId());
+            statement.setInt(5, model.getWorker().getId());
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
-            if(keys.next()){
+            if (keys.next()) {
                 model.setId(keys.getInt(1));
-            }
-        } catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    @Override
-    public void delete(Transaction model) {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM CUSTOMER WHERE CUSTOMER_ID = (?)", Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, model.getId());
-            try (PreparedStatement statement2 = connection.prepareStatement("DELETE FROM CUSTOMER WHERE CUSTOMER_ID = (?)")){
-                statement.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -72,18 +66,37 @@ public class JdbcTransactionRepository implements TransactionRepository {
     }
 
     @Override
-    public Transaction get(Integer Id) {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM CUSTOMER WHERE CUSTOMER_ID =  (?)", Statement.RETURN_GENERATED_KEYS)) {
+    public void delete(Transaction model) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "DELETE FROM TRANSACTION WHERE TRANSACTION_ID = ?", Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, model.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Transaction get(Integer id) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM TRANSACTION WHERE TRANSACTION_ID = ?", Statement.RETURN_GENERATED_KEYS)) {
             Transaction transaction = null;
-            statement.setInt(1, Id);
+            statement.setInt(1, id);
             var resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                customer = new cat.uvic.teknos.bank.domain.jdbc.models.Customer();
+                transaction = new cat.uvic.teknos.bank.domain.jdbc.models.Transaction();
+                transaction.setId(resultSet.getInt("TRANSACTION_ID"));
+                transaction.setTransactionType(resultSet.getString("TRANSACTION_TYPE"));
+                transaction.setAmount(resultSet.getInt("AMOUNT"));
+                transaction.setTransactionDate(resultSet.getDate("TRANSACTION_DATE"));
+
+                var customer = new Customer();
                 customer.setId(resultSet.getInt("CUSTOMER_ID"));
-                customer.setFirstName(resultSet.getString("FIRST_NAME"));
-                customer.setLastName(resultSet.getString("LAST_NAME"));
-                customer.setAddress(resultSet.getString("ADDRESS"));
-                customer.setEmail(resultSet.getString("EMAIL"));
+                transaction.setCustomer(customer);
+
+                var worker = new Worker();
+                worker.setId(resultSet.getInt("WORKER_ID"));
+                transaction.setWorker(worker);
             }
             return transaction;
         } catch (SQLException e) {
@@ -93,21 +106,31 @@ public class JdbcTransactionRepository implements TransactionRepository {
 
     @Override
     public Set<Transaction> getAll() {
-        try (PreparedStatement statement = connection.prepareStatement( "SELECT * FROM CUSTOMER", Statement.RETURN_GENERATED_KEYS)) {
-            var customers = new HashSet<Transaction>();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM TRANSACTION", Statement.RETURN_GENERATED_KEYS)) {
+            var transactions = new HashSet<Transaction>();
             var resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                var customer = new cat.uvic.teknos.bank.domain.jdbc.models.Customer();
+                var transaction = new cat.uvic.teknos.bank.domain.jdbc.models.Transaction();
+                transaction.setId(resultSet.getInt("TRANSACTION_ID"));
+                transaction.setTransactionType(resultSet.getString("TRANSACTION_TYPE"));
+                transaction.setAmount(resultSet.getInt("AMOUNT"));
+                transaction.setTransactionDate(resultSet.getDate("TRANSACTION_DATE"));
+
+                var customer = new Customer();
                 customer.setId(resultSet.getInt("CUSTOMER_ID"));
-                customer.setFirstName(resultSet.getString("FIRST_NAME"));
-                customer.setLastName(resultSet.getString("LAST_NAME"));
-                customer.setAddress(resultSet.getString("ADDRESS"));
-                customer.setEmail(resultSet.getString("EMAIL"));
-                customers.add(transaction);
+                transaction.setCustomer(customer);
+
+                var worker = new Worker();
+                worker.setId(resultSet.getInt("WORKER_ID"));
+                transaction.setWorker(worker);
+
+                transactions.add(transaction);
             }
-            return customers;
+            return transactions;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 }
+

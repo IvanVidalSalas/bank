@@ -23,37 +23,31 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer, Serializa
 
     @Override
     public String getFirstName() { return firstName; }
-
     @Override
     public void setFirstName(String firstName) { this.firstName = firstName; }
 
     @Override
     public String getLastName() { return lastName; }
-
     @Override
     public void setLastName(String lastName) { this.lastName = lastName; }
 
     @Override
     public String getAddress() { return address; }
-
     @Override
     public void setAddress(String address) { this.address = address; }
 
     @Override
     public String getEmail() { return email; }
-
     @Override
     public void setEmail(String email) { this.email = email; }
 
     @Override
     public Loan getLoan() { return loan; }
-
     @Override
     public void setLoan(Loan loan) { this.loan = loan; }
 
     @Override
     public Set<Transaction> getTransaction() { return transactions; }
-
     @Override
     public void setTransaction(Set<Transaction> transaction) { this.transactions = transaction; }
 }
