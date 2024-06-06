@@ -21,6 +21,9 @@ public interface Customer {
     Loan getLoan();
     void setLoan(Loan loan);
 
+    Account getAccount();
+    void setAccount(Account account);
+
     Set<Transaction> getTransaction();
     void setTransaction(Set<Transaction> transactions);
 }

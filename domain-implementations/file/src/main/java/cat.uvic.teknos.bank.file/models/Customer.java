@@ -2,7 +2,7 @@ package cat.uvic.teknos.bank.file.models;
 
 import cat.uvic.teknos.bank.models.Loan;
 import cat.uvic.teknos.bank.models.Transaction;
-import cat.uvic.teknos.bank.models.Worker;
+import cat.uvic.teknos.bank.models.Account;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -14,6 +14,7 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer, Serializa
     private String address;
     private String email;
     private Loan loan;
+    private Account account;
     private Set<Transaction> transactions;
 
     @Override
@@ -45,6 +46,11 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer, Serializa
     public Loan getLoan() { return loan; }
     @Override
     public void setLoan(Loan loan) { this.loan = loan; }
+
+    @Override
+    public Account getAccount() { return account; }
+    @Override
+    public void setAccount(Account account) { this.account = account; }
 
     @Override
     public Set<Transaction> getTransaction() { return transactions; }

@@ -1,6 +1,12 @@
 package cat.uvic.teknos.bank.domain.jpa.models;
 
+import cat.uvic.teknos.bank.models.Loan;
+import cat.uvic.teknos.bank.models.Transaction;
+import cat.uvic.teknos.bank.models.Account;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -9,7 +15,7 @@ import jakarta.persistence.*;
 public class Customer implements cat.uvic.teknos.bank.models.Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "CUSTOMER_ID")
     private int id;
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -19,6 +25,24 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer {
     private String address;
     @Column(name = "EMAIL")
     private String email;
+    @OneToOne(
+            mappedBy = "customer",
+            cascade = CascadeType.ALL,
+            targetEntity = Loan.class)
+    @PrimaryKeyJoinColumn
+    private Loan loan;
+    @OneToOne(
+            mappedBy = "account",
+            cascade = CascadeType.ALL,
+            targetEntity = Loan.class)
+    @PrimaryKeyJoinColumn
+    private Account account;
+    @OneToMany(
+            mappedBy = "artist",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            targetEntity = cat.uvic.teknos.bank.domain.jpa.models.Transaction.class)
+    private Set<Transaction> transactions = new HashSet<>();
 
 
 
@@ -72,5 +96,24 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer {
         this.email = email;
     }
 
+    @Override
+    public Loan getLoan() { return loan; }
+
+    @Override
+    public void setLoan(Loan loan) {
+        this.loan = loan;
+        this.loan.setCustomer(this);}
+
+    @Override
+    public Account getAccount() { return account; }
+
+    @Override
+    public void setAccount(Account account) { this.account = account; }
+
+    @Override
+    public Set<Transaction> getTransaction() { return transactions; }
+
+    @Override
+    public void setTransaction(Set<Transaction> transaction) { this.transactions = transaction; }
 }
 

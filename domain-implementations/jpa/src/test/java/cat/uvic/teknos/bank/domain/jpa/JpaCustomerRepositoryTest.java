@@ -1,14 +1,16 @@
 package cat.uvic.teknos.bank.domain.jpa;
 
 import cat.uvic.teknos.bank.domain.jpa.models.Customer;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CustomerTest {
+class JpaCustomerRepositoryTest {
     private static EntityManagerFactory entityManagerFactory;
+    private static EntityManager entityManager;
 
 
     @BeforeAll
@@ -20,6 +22,7 @@ class CustomerTest {
     static void tearDown() {
         entityManagerFactory.close();
     }
+
 
     @Test
     void insertTest(){

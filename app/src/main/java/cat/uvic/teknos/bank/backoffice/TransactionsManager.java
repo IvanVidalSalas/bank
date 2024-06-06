@@ -2,35 +2,37 @@ package cat.uvic.teknos.bank.backoffice;
 
 import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.CustomerRepository;
+import cat.uvic.teknos.bank.repositories.TransactionRepository;
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.skb.interfaces.document.TableRowStyle;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;
+import java.sql.Date;
 
 import static cat.uvic.teknos.bank.backoffice.IOUtils.readLine;
 
-public class CustomersManager {
+public class TransactionsManager {
     private final BufferedReader in;
     private final PrintStream out;
-    private final CustomerRepository customerRepository;
+    private final TransactionRepository transactionRepository;
     private final ModelFactory modelFactory;
 
-    public CustomersManager(BufferedReader in, PrintStream out, CustomerRepository customerRepository, ModelFactory modelFactory ) {
+    public TransactionsManager(BufferedReader in, PrintStream out, TransactionRepository transactionRepository, ModelFactory modelFactory ) {
         this.in = in;
         this.out = out;
-        this.customerRepository = customerRepository;
+        this.transactionRepository = transactionRepository;
         this.modelFactory = modelFactory;
     }
     public void start() {
-        out.println("Customers");
+        out.println("Transactions");
         out.println("Type:");
-        out.println("1 to insert a new Customer");
-        out.println("2 to update a Customer");
-        out.println("3 to delete a Customer");
-        out.println("4 to get a Customer");
-        out.println("5 to show all Customers");
+        out.println("1 to insert a new Transaction");
+        out.println("2 to update a Transaction");
+        out.println("3 to delete a Transaction");
+        out.println("4 to get a Transaction");
+        out.println("5 to show all Transactions");
         out.println("'exit' to exit");
 
         var command = "";
@@ -47,70 +49,66 @@ public class CustomersManager {
         }
         while (!command.equals("exit"));
 
-        out.println("Bye!");      
-        
+        out.println("Bye!");
+
     }
 
     private void insert() {
 
-        var customer = modelFactory.createCustomer();
+        var transaction = modelFactory.createTransaction();
 
-        out.println("First name:");
-        customer.setFirstName(readLine(in));
+        out.println("Transaction Type:");
+        transaction.setTransactionType(readLine(in));
 
-        out.println("Last name:");
-        customer.setLastName(readLine(in));
+        out.println("Amount:");
+        transaction.setAmount(Integer.parseInt(readLine(in)));
 
-        out.println("Address:");
-        customer.setAddress(readLine(in));
+        out.println("Transaction date:");
+        Date transaDate = Date.valueOf(readLine(in));
+        transaction.setTransactionDate(transaDate);
 
-        out.println("Email:");
-        customer.setEmail(readLine(in));
-
-        customerRepository.save(customer);
-
-        out.println("Inserted Customer successfully" + customer);
+        out.println("Inserted Transaction successfully" + transaction);
     }
 
     private void update() {
 
-        var customer = modelFactory.createCustomer();
+        var transaction= modelFactory.createTransaction();
 
-        out.println("Enter the id of the customer you want to update:");
+        out.println("Enter the id of the transaction you want to update:");
         int id = Integer.parseInt(readLine(in));
 
-        customer = customerRepository.get(id);
+        transaction = transactionRepository.get(id);
 
-        if (customer == null) {
-            out.println("Customer not found!");
+        if (transaction == null) {
+            out.println("Transaction not found!");
             return;
         }
 
-        out.println("Update first name:");
-        String firstName = readLine(in);
-        if (!firstName.isEmpty()) {
-            customer.setFirstName(firstName);
+        out.println("Update transaction type name:");
+        String transactionType = readLine(in);
+        if (!transactionType.isEmpty()) {
+            transaction.setTransactionType(transactionType);
         }
 
-        out.println("Update last name:");
-        String lastName = readLine(in);
-        if (!lastName.isEmpty()) {
-            customer.setLastName(lastName);
+        out.println("Update amount:");
+        int amount = readLine(in);
+        if (amount != null) {
+            transaction.setAmount(amount);
         }
 
         out.println("Update address:");
         String address = readLine(in);
         if (!address.isEmpty()) {
-            customer.setAddress(address);
+            transaction.setAddress(address);
         }
 
         out.println("Update email:");
         String email = readLine(in);
         if (!email.isEmpty()) {
-            customer.setEmail(email);
+            transaction.setEmail(email);
         }
 
-        customerRepository.save(customer);
+        customerRepository.save(transaction);
     }
 
     private void delete(){
@@ -137,16 +135,16 @@ public class CustomersManager {
             out.println(customer);
         }
     }
-    
+
     private void getAll() {
 
         var asciiTable = new AsciiTable();
         asciiTable.addRule();
-        asciiTable.addRow("Id", "First name", "Last name", "Address", "Email");
+        asciiTable.addRow("Id", "Transaction type", "Amount", "Transaction date");
         asciiTable.addRule(TableRowStyle.STRONG);
 
-        for (var customer : customerRepository.getAll()) {
-            asciiTable.addRow(customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getAddress(), customer.getEmail());
+        for (var transaction : transactionRepository.getAll()) {
+            asciiTable.addRow(transaction.getId(), transaction.getTransactionType(), transaction.getAmount(), transaction.getTransactionDate());
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);

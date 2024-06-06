@@ -31,7 +31,7 @@ class JdbcTransactionRepositoryTest {
         Customer customer = new Customer();
         customer.setId(1);
         transaction.setCustomer(customer);
-        transaction.setTransactionType("DEPOSIT");
+        transaction.setTransactionType("Deposit");
         transaction.setAmount(100);
         transaction.setTransactionDate(new Date(System.currentTimeMillis()));
 
@@ -46,7 +46,7 @@ class JdbcTransactionRepositoryTest {
     @DisplayName("Given an existing transaction with modified fields")
     void shouldUpdateATransactionTest() {
         Transaction transaction = new Transaction();
-        transaction.setTransactionType("WITHDRAW");
+        transaction.setTransactionType("Withdraw");
         transaction.setAmount(200);
         transaction.setTransactionDate(new Date(System.currentTimeMillis()));
 

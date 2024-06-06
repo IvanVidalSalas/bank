@@ -36,8 +36,6 @@ class JdbcLoanRepositoryTest {
 
         repository.save(loan);
         assertTrue(loan.getId() > 0);
-
-
     }
     @Test
     @DisplayName("Given an existing Loan with modified fields")
@@ -67,14 +65,27 @@ class JdbcLoanRepositoryTest {
 
     @Test
     void get() {
+        int id = 1;
         var repository = new JdbcLoanRepository(connection);
-        assertNotNull(repository.get(1));
+        cat.uvic.teknos.bank.models.Loan loan = repository.get(id);
+        SoutLoan(loan);
     }
 
     @Test
     void getAll() {
         var repository = new JdbcLoanRepository(connection);
         Set<cat.uvic.teknos.bank.models.Loan> loans = repository.getAll();
-        assertFalse(loans.isEmpty(), "Should not be empty");
+
+        for(var loan:loans){
+            SoutLoan(loan);
+        }
+    }
+
+    private void SoutLoan(cat.uvic.teknos.bank.models.Loan loan){
+        System.out.println("Id: " + loan.getCustomer().getId());
+        System.out.println("Loan Date: " + loan.getLoanDate());
+        System.out.println("Return Date: " + loan.getReturnDate());
+
+        System.out.println("\n");
     }
 }

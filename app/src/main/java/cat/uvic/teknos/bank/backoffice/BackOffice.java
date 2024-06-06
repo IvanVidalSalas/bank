@@ -28,6 +28,10 @@ public class BackOffice {
             command = readLine(in);
             switch (command) {
                 case "1" -> manageCustomers();
+                case "2" -> manageAccounts();
+                case "3" -> manageLoans();
+                case "4" -> manageTransactions();
+                case "5" -> manageWorkers();
             }
         }
         while (!command.equals("exit"));
@@ -37,6 +41,18 @@ public class BackOffice {
 
     private void manageCustomers() {
         new CustomersManager(in, out, repositoryFactory.getCustomerRepository(), modelFactory).start();
+    }
+    private void manageAccounts() {
+        new AccountsManager(in, out, repositoryFactory.getAccountRepository(), modelFactory).start();
+    }
+    private void manageLoans() {
+        new LoansManager(in, out, repositoryFactory.getLoanRepository(), modelFactory).start();
+    }
+    private void manageTransactions() {
+        new TransactionsManager(in, out, repositoryFactory.getTransactionRepository(), modelFactory).start();
+    }
+    private void manageWorkers() {
+        new WorkersManager(in, out, repositoryFactory.getWorkerRepository(), modelFactory).start();
     }
 
     private void showWelcomeMessage() {
@@ -50,6 +66,5 @@ public class BackOffice {
         out.print("3. Loan");
         out.print("4. Transaction");
         out.print("5. Worker");
-        out.print("6. Exit");
     }
 }

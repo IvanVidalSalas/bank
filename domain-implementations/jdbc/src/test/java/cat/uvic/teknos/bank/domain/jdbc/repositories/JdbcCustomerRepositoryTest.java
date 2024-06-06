@@ -24,8 +24,8 @@ class JdbcCustomerRepositoryTest {
     @Test
     @DisplayName("Given a new customer, when save, then a new record is added to the CUSTOMER table")
     void insertNewCustomerTest() {
+
         Customer customer = new Customer();
-        customer.setId(4);
         customer.setFirstName("Ivan");
         customer.setLastName("Doe");
         customer.setAddress("123 Main St");
@@ -41,7 +41,7 @@ class JdbcCustomerRepositoryTest {
     @DisplayName("Given an existing Customer with modified fields")
     void shouldUpdateACustomerTest() {
         Customer customer = new Customer();
-        customer.setId(1);
+        customer.setId(4);
         customer.setFirstName("Jane");
         customer.setLastName("Doe");
         customer.setAddress("456 Elm St");
@@ -58,9 +58,10 @@ class JdbcCustomerRepositoryTest {
         customer.setId(4);
 
         var repository = new JdbcCustomerRepository(connection);
+        repository.save(customer);
         repository.delete(customer);
 
-        assertNull(repository.get(4));
+        assertNull(repository.get(customer.getId()));
     }
 
     @Test

@@ -2,6 +2,7 @@ package cat.uvic.teknos.bank.domain.jdbc.models;
 
 import cat.uvic.teknos.bank.models.Loan;
 import cat.uvic.teknos.bank.models.Transaction;
+import cat.uvic.teknos.bank.models.Account;
 
 import java.util.Set;
 
@@ -12,6 +13,7 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer {
     private String address;
     private String email;
     private Loan loan;
+    private Account account;
     private Set<Transaction> transactions;
 
     @Override
@@ -40,10 +42,16 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer {
     public void setEmail(String email) { this.email = email; }
 
     @Override
-    public cat.uvic.teknos.bank.models.Loan getLoan() { return loan; }
+    public Loan getLoan() { return loan; }
 
     @Override
     public void setLoan(Loan loan) { this.loan = loan; }
+
+    @Override
+    public Account getAccount() { return account; }
+
+    @Override
+    public void setAccount(Account account) { this.account = account; }
 
     @Override
     public Set<Transaction> getTransaction() { return transactions; }
