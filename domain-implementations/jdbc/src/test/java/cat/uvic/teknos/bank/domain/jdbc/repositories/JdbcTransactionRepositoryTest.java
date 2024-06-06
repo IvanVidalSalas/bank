@@ -45,6 +45,7 @@ class JdbcTransactionRepositoryTest {
     @Test
     @DisplayName("Given an existing transaction with modified fields")
     void shouldUpdateATransactionTest() {
+
         Transaction transaction = new Transaction();
         transaction.setTransactionType("Withdraw");
         transaction.setAmount(200);
@@ -79,7 +80,6 @@ class JdbcTransactionRepositoryTest {
 
         assertNull(repository.get(1));
     }
-
 
 
     @Test

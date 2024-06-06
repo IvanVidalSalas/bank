@@ -32,7 +32,6 @@ class JdbcCustomerRepositoryTest {
         customer.setEmail("john@example.com");
 
         var repository = new JdbcCustomerRepository(connection);
-        //Test
         repository.save(customer);
         assertTrue(customer.getId() > 0);
     }
@@ -40,6 +39,7 @@ class JdbcCustomerRepositoryTest {
     @Test
     @DisplayName("Given an existing Customer with modified fields")
     void shouldUpdateACustomerTest() {
+
         Customer customer = new Customer();
         customer.setId(4);
         customer.setFirstName("Jane");
@@ -54,6 +54,7 @@ class JdbcCustomerRepositoryTest {
 
     @Test
     void delete() {
+
         Customer customer = new Customer();
         customer.setId(4);
 
@@ -66,6 +67,7 @@ class JdbcCustomerRepositoryTest {
 
     @Test
     void get() {
+
         int id = 1;
         var repository = new JdbcCustomerRepository(connection);
 
@@ -84,6 +86,7 @@ class JdbcCustomerRepositoryTest {
     }
 
     private void SoutCustomer(cat.uvic.teknos.bank.models.Customer customer){
+
         System.out.println("Customer Id: " + customer.getId());
         System.out.println("First Name: " + customer.getFirstName());
         System.out.println("Last Name: " + customer.getLastName());
@@ -92,4 +95,6 @@ class JdbcCustomerRepositoryTest {
 
         System.out.println("\n");
     }
+
+
 }

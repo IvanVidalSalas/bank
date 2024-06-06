@@ -61,10 +61,10 @@ public class BackOffice {
     }
 
     private void showMainMenu() {
-        out.print("1. Customer");
-        out.print("2. Account");
-        out.print("3. Loan");
-        out.print("4. Transaction");
-        out.print("5. Worker");
+        out.println("1. Customer");
+        out.println("2. Account");
+        out.println("3. Loan");
+        out.println("4. Transaction");
+        out.println("5. Worker");
     }
 }

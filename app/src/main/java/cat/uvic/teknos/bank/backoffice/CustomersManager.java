@@ -109,8 +109,8 @@ public class CustomersManager {
         if (!email.isEmpty()) {
             customer.setEmail(email);
         }
-
         customerRepository.save(customer);
+        out.println("Updated Customer successfully" + customer);
     }
 
     private void delete(){
@@ -121,6 +121,7 @@ public class CustomersManager {
         int id = Integer.parseInt(readLine(in));
         customer.setId(id);
         customerRepository.delete(customer);
+        out.println("Deleted Customer successfully" + customer);
     }
 
     private void get(){

@@ -59,13 +59,10 @@ public class LoansManager {
 
         var loan = modelFactory.createLoan();
 
-        out.println("Enter ID:");
+        out.println("Enter customer id:");
         int customerId = Integer.parseInt(readLine(in));
-        Customer customer = customerRepository.get(customerId);
-        if (customer == null) {
-            out.println("Customer not found!");
-            return;
-        }
+        Customer customer = modelFactory.createCustomer();
+        customer.setId(customerId);
         loan.setCustomer(customer);
 
         out.println("Enter loan date:");
@@ -82,14 +79,14 @@ public class LoansManager {
 
     private void update() {
 
-        out.println("Enter the id of the loan you want to update:");
-        int loanId = Integer.parseInt(readLine(in));
+        var loan = modelFactory.createLoan();
 
-        Loan loan = loanRepository.get(loanId);
-        if (loan == null) {
-            out.println("Loan not found!");
-            return;
-        }
+        out.println("Enter the id you want to update:");
+        int customerId = Integer.parseInt(readLine(in));
+        Customer customer = modelFactory.createCustomer();
+        customer.setId(customerId);
+
+        loan.setCustomer(customer);
 
         out.println("Update loan date:");
         String loanDateString = readLine(in);

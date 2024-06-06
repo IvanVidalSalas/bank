@@ -1,5 +1,6 @@
 package cat.uvic.teknos.bank.backoffice;
 
+import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.CustomerRepository;
 import cat.uvic.teknos.bank.repositories.TransactionRepository;
@@ -57,6 +58,12 @@ public class TransactionsManager {
 
         var transaction = modelFactory.createTransaction();
 
+        out.println("Enter customer ID:");
+        int customerId = Integer.parseInt(readLine(in));
+        Customer customer = modelFactory.createCustomer();
+        customer.setId(customerId);
+        transaction.setCustomer(customer);
+
         out.println("Transaction Type:");
         transaction.setTransactionType(readLine(in));
 
@@ -76,13 +83,18 @@ public class TransactionsManager {
 
         out.println("Enter the id of the transaction you want to update:");
         int id = Integer.parseInt(readLine(in));
-
         transaction = transactionRepository.get(id);
 
         if (transaction == null) {
             out.println("Transaction not found!");
             return;
         }
+
+        out.println("Enter the customer ID:");
+        int customerId = Integer.parseInt(readLine(in));
+        Customer customer = modelFactory.createCustomer();
+        customer.setId(customerId);
+        transaction.setCustomer(customer);
 
         out.println("Update transaction type name:");
         String transactionType = readLine(in);
@@ -91,48 +103,34 @@ public class TransactionsManager {
         }
 
         out.println("Update amount:");
-        int amount = readLine(in);
-        if (amount != null) {
+        int amount = Integer.parseInt(readLine(in));
             transaction.setAmount(amount);
-        }
 
-        out.println("Update address:");
-        String address = readLine(in);
-        if (!address.isEmpty()) {
-            transaction.setAddress(address);
-        }
-
-        out.println("Update email:");
-        String email = readLine(in);
-        if (!email.isEmpty()) {
-            transaction.setEmail(email);
-        }
-
-        customerRepository.save(transaction);
+        transactionRepository.save(transaction);
     }
 
     private void delete(){
 
-        var customer = modelFactory.createCustomer();
+        var transaction = modelFactory.createTransaction();
 
-        out.println("Enter the id of customer you want to delete:");
+        out.println("Enter the id of transaction you want to delete:");
         int id = Integer.parseInt(readLine(in));
-        customer.setId(id);
-        customerRepository.delete(customer);
+        transaction.setId(id);
+        transactionRepository.delete(transaction);
     }
 
     private void get(){
 
-        out.println("Please enter the customer: ");
+        out.println("Please enter the transaction ID: ");
         int id = Integer.parseInt(readLine(in));
 
-        var customer = customerRepository.get(id);
+        var transaction = transactionRepository.get(id);
 
-        if (customer == null) {
-            out.println("Customer not found!");
+        if (transaction == null) {
+            out.println("Transaction not found!");
         } else {
-            out.println("Customer Details:");
-            out.println(customer);
+            out.println("Transaction Details:");
+            out.println(transaction);
         }
     }
 
@@ -140,11 +138,11 @@ public class TransactionsManager {
 
         var asciiTable = new AsciiTable();
         asciiTable.addRule();
-        asciiTable.addRow("Id", "Transaction type", "Amount", "Transaction date");
+        asciiTable.addRow("Id","Customer_id", "Transaction type", "Amount", "Transaction date");
         asciiTable.addRule(TableRowStyle.STRONG);
 
         for (var transaction : transactionRepository.getAll()) {
-            asciiTable.addRow(transaction.getId(), transaction.getTransactionType(), transaction.getAmount(), transaction.getTransactionDate());
+            asciiTable.addRow(transaction.getId(), transaction.getCustomer().getId(), transaction.getTransactionType(), transaction.getAmount(), transaction.getTransactionDate());
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);

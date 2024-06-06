@@ -58,7 +58,7 @@ public class JdbcWorkerRepository implements WorkerRepository {
             if (transaction != null) {
                 statement.setInt(1, transaction.getId());
             } else {
-                // If the worker doesn't have an associated transaction, set the field to NULL
+
                 statement.setNull(1, Types.INTEGER);
             }
             statement.setString(2, model.getFirstName());

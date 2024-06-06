@@ -1,5 +1,6 @@
 package cat.uvic.teknos.bank.backoffice;
 
+import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.AccountRepository;
 import de.vandermeer.asciitable.AsciiTable;
@@ -8,6 +9,7 @@ import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;
+import java.sql.Date;
 
 import static cat.uvic.teknos.bank.backoffice.IOUtils.readLine;
 
@@ -54,6 +56,12 @@ public class AccountsManager {
 
         var account = modelFactory.createAccount();
 
+        out.println("Customer id:");
+        int customerId = Integer.parseInt(readLine(in));
+        Customer customer = modelFactory.createCustomer();
+        customer.setId(customerId);
+        account.setCustomer(customer);
+
         out.println("Account Type:");
         account.setAccountType(readLine(in));
 
@@ -68,6 +76,22 @@ public class AccountsManager {
     private void update() {
 
         var account = modelFactory.createAccount();
+
+        out.println("Update the customer id:");
+        int customerId = Integer.parseInt(readLine(in));
+        Customer customer = modelFactory.createCustomer();
+        customer.setId(customerId);
+
+        out.println("Update account type:");
+        String accountType = readLine(in);
+        if (!accountType.isEmpty()) {
+            account.setAccountType(accountType);
+        }
+
+        out.println("Update balance:");
+        int balance = Integer.parseInt(readLine(in));
+        account.setBalance(balance);
+
 
         accountRepository.save(account);
     }
@@ -101,11 +125,11 @@ public class AccountsManager {
 
         var asciiTable = new AsciiTable();
         asciiTable.addRule();
-        asciiTable.addRow("Id", "Account type", "Balance");
+        asciiTable.addRow("Id", "Customer id" , "Account type", "Balance");
         asciiTable.addRule(TableRowStyle.STRONG);
 
         for (var account : accountRepository.getAll()) {
-            asciiTable.addRow(account.getId(), account.getAccountType(), account.getBalance());
+            asciiTable.addRow(account.getId(), account.getCustomer().getId(), account.getAccountType(), account.getBalance());
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);
