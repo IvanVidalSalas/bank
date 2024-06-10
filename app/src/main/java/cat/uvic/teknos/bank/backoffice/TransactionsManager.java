@@ -2,9 +2,9 @@ package cat.uvic.teknos.bank.backoffice;
 
 import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.ModelFactory;
-import cat.uvic.teknos.bank.repositories.CustomerRepository;
 import cat.uvic.teknos.bank.repositories.TransactionRepository;
 import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciithemes.a7.A7_Grids;
 import de.vandermeer.skb.interfaces.document.TableRowStyle;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
@@ -27,8 +27,8 @@ public class TransactionsManager {
         this.modelFactory = modelFactory;
     }
     public void start() {
-        out.println("Transactions");
-        out.println("Type:");
+
+        out.println("\nWhat would you like to do?\n");
         out.println("1 to insert a new Transaction");
         out.println("2 to update a Transaction");
         out.println("3 to delete a Transaction");
@@ -49,9 +49,7 @@ public class TransactionsManager {
             }
         }
         while (!command.equals("exit"));
-
-        out.println("Bye!");
-
+        out.println("\nSelect a menu option or type 'exit' to exit the application:");
     }
 
     private void insert() {
@@ -74,7 +72,9 @@ public class TransactionsManager {
         Date transaDate = Date.valueOf(readLine(in));
         transaction.setTransactionDate(transaDate);
 
-        out.println("Inserted Transaction successfully" + transaction);
+        transactionRepository.save(transaction);
+        out.println("Inserted Transaction successfully " + transaction);
+        start();
     }
 
     private void update() {
@@ -90,7 +90,7 @@ public class TransactionsManager {
             return;
         }
 
-        out.println("Enter the customer ID:");
+        out.println("Enter the customer id:");
         int customerId = Integer.parseInt(readLine(in));
         Customer customer = modelFactory.createCustomer();
         customer.setId(customerId);
@@ -106,7 +106,14 @@ public class TransactionsManager {
         int amount = Integer.parseInt(readLine(in));
             transaction.setAmount(amount);
 
+        out.println("Update transaction date:");
+        Date transaDate = Date.valueOf(readLine(in));
+        transaction.setTransactionDate(transaDate);
+
+
         transactionRepository.save(transaction);
+        out.println("Updated Transaction successfully " + customer);
+        start();
     }
 
     private void delete(){
@@ -117,6 +124,8 @@ public class TransactionsManager {
         int id = Integer.parseInt(readLine(in));
         transaction.setId(id);
         transactionRepository.delete(transaction);
+        out.println("Deleted Transaction successfully " + transaction);
+        start();
     }
 
     private void get(){
@@ -129,9 +138,13 @@ public class TransactionsManager {
         if (transaction == null) {
             out.println("Transaction not found!");
         } else {
-            out.println("Transaction Details:");
-            out.println(transaction);
+            out.println("Transaction:");
+            out.println("Customer id: " + transaction.getCustomer().getId());
+            out.println("Transaction type: " + transaction.getTransactionType());
+            out.println("Amount: " + transaction.getAmount());
+            out.println("Transaction date: " + transaction.getTransactionDate());
         }
+        start();
     }
 
     private void getAll() {
@@ -146,7 +159,9 @@ public class TransactionsManager {
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);
+        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
         String render = asciiTable.render();
         System.out.println(render);
+        start();
     }
 }

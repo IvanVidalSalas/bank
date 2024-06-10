@@ -23,7 +23,7 @@ public class JpaWorkerRepository implements WorkerRepository {
                 entityManager.persist(model);
             } else if (!entityManager.contains(model)) {
                 // update
-                Worker worker = entityManager.find(Worker.class, model.getId());
+                var worker = entityManager.find(Worker.class, model.getId());
 
                 if (model.getFirstName() == null || model.getFirstName().isEmpty()) {
                     model.setFirstName(worker.getFirstName());
@@ -34,9 +34,7 @@ public class JpaWorkerRepository implements WorkerRepository {
                 if (model.getTransaction() == null || model.getTransaction().isEmpty()) {
                     model.setTransaction(worker.getTransaction());
                 }
-                if (model.getAccount() == null || model.getAccount().isEmpty()) {
-                    model.setAccount(worker.getAccount());
-                }
+
                 entityManager.merge(model);
             }
             entityManager.getTransaction().commit();

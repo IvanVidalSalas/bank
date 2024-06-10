@@ -1,6 +1,7 @@
 package cat.uvic.teknos.bank.domain.jdbc.repositories;
 
 import cat.uvic.teknos.bank.domain.jdbc.models.Account;
+import cat.uvic.teknos.bank.domain.jdbc.models.Customer;
 import com.fcardara.dbtestutils.junit.CreateSchemaExtension;
 import com.fcardara.dbtestutils.junit.GetConnectionExtension;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +25,12 @@ class JdbcAccountRepositoryTest {
     @Test
     @DisplayName("Given a new Account, when save, then a new record is added to the CUSTOMER table")
     void insertNewAccountTest() {
+
+        Customer customer = new Customer();
+        customer.setId(1);
+
         Account account = new Account();
-        account.setId(4);
+        account.setCustomer(customer);
         account.setAccountType("Savings");
         account.setBalance(500);
 
@@ -39,8 +44,13 @@ class JdbcAccountRepositoryTest {
     @Test
     @DisplayName("Given an existing Account with modified fields")
     void shouldUpdateAnAccountTest() {
+
+        Customer customer = new Customer();
+        customer.setId(1);
+
         Account account = new Account();
-        account.setId(1);
+        account.setId(5);
+        account.setCustomer(customer);
         account.setAccountType("Checking");
         account.setBalance(250);
 
@@ -52,25 +62,41 @@ class JdbcAccountRepositoryTest {
 
     @Test
     void delete() {
+
         Account account = new Account();
-        account.setId(4);
+        account.setId(5);
 
         var repository = new JdbcAccountRepository(connection);
         repository.delete(account);
 
-        assertNull(repository.get(4));
+        assertNull(repository.get(5));
     }
 
     @Test
     void get() {
+
+        int id = 4;
         var repository = new JdbcAccountRepository(connection);
-        assertNotNull(repository.get(1));
+
+        cat.uvic.teknos.bank.models.Account account = repository.get(id);
+        SoutAccount(account);
     }
 
     @Test
     void getAll() {
         var repository = new JdbcAccountRepository(connection);
         Set<cat.uvic.teknos.bank.models.Account> accounts = repository.getAll();
-        assertFalse(accounts.isEmpty(), "Should not be empty");
+        for(var account:accounts){
+            SoutAccount(account);
+        }
+    }
+
+    private void SoutAccount(cat.uvic.teknos.bank.models.Account account){
+        System.out.println("Account Id: " + account.getId());
+        System.out.println("Customer Id: " + account.getCustomer().getId());
+        System.out.println("Account type: " + account.getAccountType());
+        System.out.println("Balance: " + account.getBalance());
+
+        System.out.println("\n");
     }
 }

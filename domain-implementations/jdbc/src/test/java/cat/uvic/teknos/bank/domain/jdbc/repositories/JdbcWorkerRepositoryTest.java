@@ -33,7 +33,6 @@ class JdbcWorkerRepositoryTest {
 
         var repository = new JdbcWorkerRepository(connection);
 
-        // Test
         repository.save(worker);
         assertTrue(worker.getId() > 0);
     }
@@ -43,6 +42,7 @@ class JdbcWorkerRepositoryTest {
     void shouldUpdateAWorkerTest() {
 
         Worker worker = new Worker();
+        worker.setId(7);
         worker.setFirstName("Xevi");
         worker.setLastName("Jove");
 
@@ -56,7 +56,7 @@ class JdbcWorkerRepositoryTest {
     @DisplayName("Given a worker, when delete, then the record is removed from the WORKER table")
     void delete() {
         Worker worker = new Worker();
-        worker.setId(1);
+        worker.setId(7);
 
         var repository = new JdbcWorkerRepository(connection);
         repository.delete(worker);
@@ -66,7 +66,7 @@ class JdbcWorkerRepositoryTest {
 
     @Test
     void get() {
-        int id = 1;
+        int id = 6 ;
         var repository = new JdbcWorkerRepository(connection);
 
         cat.uvic.teknos.bank.models.Worker worker = repository.get(id);
@@ -85,6 +85,7 @@ class JdbcWorkerRepositoryTest {
 
     private void SoutWorker(cat.uvic.teknos.bank.models.Worker worker){
         System.out.println("Worker Id: " + worker.getId());
+        System.out.println("Transaction Id: " + worker.getTransaction().getClass());
         System.out.println("First Name: " + worker.getFirstName());
         System.out.println("Last Name: " + worker.getLastName());
 

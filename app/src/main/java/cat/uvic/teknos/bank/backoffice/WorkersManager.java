@@ -1,14 +1,17 @@
 package cat.uvic.teknos.bank.backoffice;
 
 import cat.uvic.teknos.bank.models.ModelFactory;
+import cat.uvic.teknos.bank.models.Transaction;
 import cat.uvic.teknos.bank.models.Worker;
 import cat.uvic.teknos.bank.repositories.WorkerRepository;
 import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciithemes.a7.A7_Grids;
 import de.vandermeer.skb.interfaces.document.TableRowStyle;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;
+import java.util.Set;
 
 import static cat.uvic.teknos.bank.backoffice.IOUtils.readLine;
 
@@ -25,8 +28,8 @@ public class WorkersManager {
         this.modelFactory = modelFactory;
     }
     public void start() {
-        out.println("Workers");
-        out.println("Type:");
+
+        out.println("\nWhat would you like to do?\n");
         out.println("1 to insert a new Worker");
         out.println("2 to update a Worker");
         out.println("3 to delete a Worker");
@@ -47,9 +50,7 @@ public class WorkersManager {
             }
         }
         while (!command.equals("exit"));
-
-        out.println("Bye!");      
-        
+        out.println("\nSelect a menu option or type 'exit' to exit the application:");
     }
 
     private void insert() {
@@ -62,7 +63,10 @@ public class WorkersManager {
         out.println("Last name:");
         worker.setLastName(readLine(in));
 
-        out.println("Inserted Worker successfully" + worker);
+        workerRepository.save(worker);
+
+        out.println("Inserted Worker successfully " + worker);
+        start();
     }
 
     private void update() {
@@ -72,11 +76,6 @@ public class WorkersManager {
         out.println("Enter the id of the worker you want to update:");
         int id = Integer.parseInt(readLine(in));
         worker = workerRepository.get(id);
-
-        if (worker == null) {
-            out.println("Worker not found!");
-            return;
-        }
 
         out.println("Update first name:");
         String firstName = readLine(in);
@@ -91,6 +90,8 @@ public class WorkersManager {
         }
 
         workerRepository.save(worker);
+        out.println("Updated Worker successfully " + worker);
+        start();
     }
 
     private void delete(){
@@ -101,36 +102,43 @@ public class WorkersManager {
         int id = Integer.parseInt(readLine(in));
         worker.setId(id);
         workerRepository.delete(worker);
+        out.println("Deleted Worker successfully " + worker);
+        start();
     }
 
     private void get(){
 
-        out.println("Please enter the worker: ");
+        out.println("Please enter the worker id: ");
         int id = Integer.parseInt(readLine(in));
-
-        var worker = workerRepository.get(id);
+        Worker worker = workerRepository.get(id);
 
         if (worker == null) {
             out.println("Worker not found!");
         } else {
-            out.println("Worker Details:");
-            out.println(worker);
+            out.println("Worker:");
+            out.println("Worker id:" + worker.getId());
+            out.println("Transaction id:" + worker.getTransaction().getClass());
+            out.println("First name:" + worker.getFirstName());
+            out.println("Last name:" + worker.getLastName());
         }
+        start();
     }
     
     private void getAll() {
 
         var asciiTable = new AsciiTable();
         asciiTable.addRule();
-        asciiTable.addRow("Id", "First name", "Last name");
+        asciiTable.addRow("Id", "Transaction id", "First name", "Last name");
         asciiTable.addRule(TableRowStyle.STRONG);
 
         for (var worker : workerRepository.getAll()) {
-            asciiTable.addRow(worker.getId(), worker.getFirstName(), worker.getLastName());
+            asciiTable.addRow(worker.getId(), worker.getTransaction().getClass(), worker.getFirstName(), worker.getLastName());
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);
+        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
         String render = asciiTable.render();
         System.out.println(render);
+        start();
     }
 }

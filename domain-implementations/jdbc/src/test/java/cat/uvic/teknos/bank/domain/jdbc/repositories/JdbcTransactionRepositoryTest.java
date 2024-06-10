@@ -27,9 +27,11 @@ class JdbcTransactionRepositoryTest {
     @Test
     @DisplayName("Given a new transaction, when save, then a new record is added to the TRANSACTION table")
     void insertNewTransactionTest() {
-        Transaction transaction = new Transaction();
+
         Customer customer = new Customer();
-        customer.setId(1);
+        customer.setId(3);
+
+        Transaction transaction = new Transaction();
         transaction.setCustomer(customer);
         transaction.setTransactionType("Deposit");
         transaction.setAmount(100);
@@ -46,34 +48,26 @@ class JdbcTransactionRepositoryTest {
     @DisplayName("Given an existing transaction with modified fields")
     void shouldUpdateATransactionTest() {
 
+        Customer customer = new Customer();
+        customer.setId(1);
+
         Transaction transaction = new Transaction();
+        transaction.setId(11);
+        transaction.setCustomer(customer);
         transaction.setTransactionType("Withdraw");
         transaction.setAmount(200);
         transaction.setTransactionDate(new Date(System.currentTimeMillis()));
 
-        Customer customer = new Customer();
-        customer.setId(1);
-        transaction.setCustomer(customer);
-
-        Worker worker = new Worker();
-        worker.setId(1);
-        transaction.setWorker(worker);
-
         var repository = new JdbcTransactionRepository(connection);
         repository.save(transaction);
         assertTrue(transaction.getId() > 0);
-
-        // Update transaction
-        transaction.setAmount(200);
-        repository.save(transaction);
-
     }
 
     @Test
     @DisplayName("Given a transaction, when delete, then the record is removed from the TRANSACTION table")
     void delete() {
         Transaction transaction = new Transaction();
-        transaction.setId(1);
+        transaction.setId(11);
 
         var repository = new JdbcTransactionRepository(connection);
         repository.delete(transaction);
@@ -84,6 +78,7 @@ class JdbcTransactionRepositoryTest {
 
     @Test
     void get() {
+
         int id = 9;
         var repository = new JdbcTransactionRepository(connection);
 

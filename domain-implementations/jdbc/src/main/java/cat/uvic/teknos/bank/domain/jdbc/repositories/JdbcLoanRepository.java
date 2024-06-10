@@ -55,8 +55,9 @@ public class JdbcLoanRepository implements LoanRepository {
 
     @Override
     public void delete(Loan model) {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM LOAN WHERE CUSTOMER_ID = (?)", Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM LOAN WHERE CUSTOMER_ID = ?", Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, model.getCustomer().getId());
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +75,7 @@ public class JdbcLoanRepository implements LoanRepository {
                 customer.setId(resultSet.getInt("CUSTOMER_ID"));
                 loan.setCustomer(customer);
                 loan.setLoanDate(resultSet.getDate("LOAN_DATE"));
-                loan.setLoanDate(resultSet.getDate("RETURN_DATE"));
+                loan.setReturnDate(resultSet.getDate("RETURN_DATE"));
             }
             return loan;
         } catch (SQLException e) {
@@ -93,7 +94,7 @@ public class JdbcLoanRepository implements LoanRepository {
                 customer.setId(resultSet.getInt("CUSTOMER_ID"));
                 loan.setCustomer(customer);
                 loan.setLoanDate(resultSet.getDate("LOAN_DATE"));
-                loan.setLoanDate(resultSet.getDate("RETURN_DATE"));
+                loan.setReturnDate(resultSet.getDate("RETURN_DATE"));
                 loans.add(loan);
             }
             return loans;

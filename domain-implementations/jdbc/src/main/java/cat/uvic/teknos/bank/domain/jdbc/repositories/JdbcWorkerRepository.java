@@ -44,8 +44,8 @@ public class JdbcWorkerRepository implements WorkerRepository {
             statement.setString(2, model.getFirstName());
             statement.setString(3, model.getLastName());
             statement.setInt(4, model.getId());
-            statement.executeUpdate();
 
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,16 +58,11 @@ public class JdbcWorkerRepository implements WorkerRepository {
             if (transaction != null) {
                 statement.setInt(1, transaction.getId());
             } else {
-
                 statement.setNull(1, Types.INTEGER);
             }
             statement.setString(2, model.getFirstName());
             statement.setString(3, model.getLastName());
             statement.executeUpdate();
-            ResultSet keys = statement.getGeneratedKeys();
-            if (keys.next()) {
-                model.setId(keys.getInt(1));
-            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

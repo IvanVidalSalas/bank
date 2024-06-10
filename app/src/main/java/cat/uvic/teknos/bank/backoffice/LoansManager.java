@@ -5,6 +5,7 @@ import cat.uvic.teknos.bank.models.Loan;
 import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.LoanRepository;
 import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciithemes.a7.A7_Grids;
 import de.vandermeer.skb.interfaces.document.TableRowStyle;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
@@ -28,8 +29,8 @@ public class LoansManager {
     }
 
     public void start() {
-        out.println("Loans");
-        out.println("Type:");
+
+        out.println("\nWhat would you like to do?\n");
         out.println("1 to insert a new Loan");
         out.println("2 to update a Loan");
         out.println("3 to delete a Loan");
@@ -50,16 +51,14 @@ public class LoansManager {
             }
         }
         while (!command.equals("exit"));
-
-        out.println("Bye!");
-
+        out.println("\nSelect a menu option or type 'exit' to exit the application:");
     }
 
     private void insert() {
 
         var loan = modelFactory.createLoan();
 
-        out.println("Enter customer id:");
+        out.println("Enter customer id of the new Loan:");
         int customerId = Integer.parseInt(readLine(in));
         Customer customer = modelFactory.createCustomer();
         customer.setId(customerId);
@@ -75,13 +74,14 @@ public class LoansManager {
 
         loanRepository.save(loan);
         out.println("Inserted Loan successfully: " + loan);
+        start();
     }
 
     private void update() {
 
         var loan = modelFactory.createLoan();
 
-        out.println("Enter the id you want to update:");
+        out.println("Update customer id of Loan:");
         int customerId = Integer.parseInt(readLine(in));
         Customer customer = modelFactory.createCustomer();
         customer.setId(customerId);
@@ -104,50 +104,60 @@ public class LoansManager {
 
         loanRepository.save(loan);
         out.println("Loan updated successfully: " + loan);
+        start();
     }
 
     private void delete() {
 
-        out.println("Enter the id of the loan you want to delete:");
-        int loanId = Integer.parseInt(readLine(in));
+        var loan = modelFactory.createLoan();
 
-        Loan loan = loanRepository.get(loanId);
-        if (loan == null) {
-            out.println("Loan not found!");
-            return;
-        }
+        out.println("Delete customer id of Loan:");
+        int customerId = Integer.parseInt(readLine(in));
+        Customer customer = modelFactory.createCustomer();
+        customer.setId(customerId);
+
+        loan.setCustomer(customer);
 
         loanRepository.delete(loan);
-        out.println("Loan deleted successfully");
+        out.println("Loan deleted successfully " + loan);
+        start();
     }
 
     private void get() {
 
-        out.println("Enter the id of the loan you want to retrieve:");
-        int loanId = Integer.parseInt(readLine(in));
+        out.println("Enter the customer id of the loan you would like to retrieve:");
+        int customerId = Integer.parseInt(readLine(in));
+        Customer customer = modelFactory.createCustomer();
+        customer.setId(customerId);
 
-        Loan loan = loanRepository.get(loanId);
-        if (loan == null) {
-            out.println("Loan not found!");
-        } else {
-            out.println("Loan Details:");
-            out.println(loan);
-        }
+        var loan = loanRepository.get(customerId);
+
+        loan.setCustomer(customer);
+
+        loanRepository.get(customerId);
+
+        out.println("Loan:");
+        out.println("Customer id: " + loan.getCustomer().getId());
+        out.println("Loan date: " + loan.getLoanDate());
+        out.println("Return date: " + loan.getReturnDate());
+        start();
     }
 
     private void getAll() {
 
         var asciiTable = new AsciiTable();
         asciiTable.addRule();
-        asciiTable.addRow("ID", "Loan Date", "Return Date");
+        asciiTable.addRow("Id", "Loan Date", "Return Date");
         asciiTable.addRule(TableRowStyle.STRONG);
 
-        for (var loan : loanRepository.getAll()) { asciiTable.addRow( loan.getCustomer().getId(), loan.getLoanDate(), loan.getReturnDate());
+        for (var loan : loanRepository.getAll()) {
+            asciiTable.addRow( loan.getCustomer().getId(), loan.getLoanDate(), loan.getReturnDate());
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);
+        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
         String render = asciiTable.render();
         out.println(render);
+        start();
     }
-
 }

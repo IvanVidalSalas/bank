@@ -41,9 +41,6 @@ public class JpaTransactionRepository implements TransactionRepository {
                 if (model.getCustomer() == null) {
                     model.setCustomer(transaction.getCustomer());
                 }
-                if (model.getWorker() == null) {
-                    model.setWorker(transaction.getWorker());
-                }
                 entityManager.merge(model);
             }
             entityManager.getTransaction().commit();

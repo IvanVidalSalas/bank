@@ -3,6 +3,7 @@ package cat.uvic.teknos.bank.backoffice;
 import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.CustomerRepository;
 import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciithemes.a7.A7_Grids;
 import de.vandermeer.skb.interfaces.document.TableRowStyle;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
@@ -24,8 +25,8 @@ public class CustomersManager {
         this.modelFactory = modelFactory;
     }
     public void start() {
-        out.println("Customers");
-        out.println("Type:");
+
+        out.println("\nWhat would you like to do?\n");
         out.println("1 to insert a new Customer");
         out.println("2 to update a Customer");
         out.println("3 to delete a Customer");
@@ -46,9 +47,7 @@ public class CustomersManager {
             }
         }
         while (!command.equals("exit"));
-
-        out.println("Bye!");      
-        
+        out.println("\nSelect a menu option or type 'exit' to exit the application:");
     }
 
     private void insert() {
@@ -69,7 +68,8 @@ public class CustomersManager {
 
         customerRepository.save(customer);
 
-        out.println("Inserted Customer successfully" + customer);
+        out.println("Inserted Customer successfully " + customer);
+        start();
     }
 
     private void update() {
@@ -78,7 +78,6 @@ public class CustomersManager {
 
         out.println("Enter the id of the customer you want to update:");
         int id = Integer.parseInt(readLine(in));
-
         customer = customerRepository.get(id);
 
         if (customer == null) {
@@ -110,7 +109,8 @@ public class CustomersManager {
             customer.setEmail(email);
         }
         customerRepository.save(customer);
-        out.println("Updated Customer successfully" + customer);
+        out.println("Updated Customer successfully " + customer);
+        start();
     }
 
     private void delete(){
@@ -121,12 +121,13 @@ public class CustomersManager {
         int id = Integer.parseInt(readLine(in));
         customer.setId(id);
         customerRepository.delete(customer);
-        out.println("Deleted Customer successfully" + customer);
+        out.println("Deleted Customer successfully " + customer);
+        start();
     }
 
     private void get(){
 
-        out.println("Please enter the customer: ");
+        out.println("Please enter the customer id: ");
         int id = Integer.parseInt(readLine(in));
 
         var customer = customerRepository.get(id);
@@ -134,9 +135,13 @@ public class CustomersManager {
         if (customer == null) {
             out.println("Customer not found!");
         } else {
-            out.println("Customer Details:");
-            out.println(customer);
+            out.println("Customer:");
+            out.println("Customer First Name: " + customer.getFirstName());
+            out.println("Customer Last Name: " + customer.getLastName());
+            out.println("Customer Address: " + customer.getAddress());
+            out.println("Customer Email: " + customer.getEmail());
         }
+        start();
     }
     
     private void getAll() {
@@ -151,7 +156,10 @@ public class CustomersManager {
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);
+        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
         String render = asciiTable.render();
-        System.out.println(render);
+        out.println(render);
+        start();
     }
+
 }

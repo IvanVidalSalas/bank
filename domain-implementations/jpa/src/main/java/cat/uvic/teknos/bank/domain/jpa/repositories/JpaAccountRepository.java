@@ -39,9 +39,6 @@ public class JpaAccountRepository implements AccountRepository {
                 if (model.getCustomer() == null) {
                     model.setCustomer(account.getCustomer());
                 }
-                if (model.getWorker() == null) {
-                    model.setWorker(account.getWorker());
-                }
                 entityManager.merge(model);
             }
             entityManager.getTransaction().commit();

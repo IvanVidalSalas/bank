@@ -35,8 +35,7 @@ public class BackOffice {
             }
         }
         while (!command.equals("exit"));
-
-        out.println("Bye!");
+        out.println("See you soon!");
     }
 
     private void manageCustomers() {
@@ -56,8 +55,8 @@ public class BackOffice {
     }
 
     private void showWelcomeMessage() {
-        out.println("Welcome to the Bank BackOffice!");
-        out.println("Select a menu option or type exit to exit the application");
+        out.println("\nWelcome to the Bank BackOffice!");
+        out.println("Select a menu option or type 'exit' to exit the application:\n");
     }
 
     private void showMainMenu() {

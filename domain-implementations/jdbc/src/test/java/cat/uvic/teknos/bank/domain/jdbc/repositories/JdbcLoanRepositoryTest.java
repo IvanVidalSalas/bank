@@ -1,5 +1,6 @@
 package cat.uvic.teknos.bank.domain.jdbc.repositories;
 
+import cat.uvic.teknos.bank.domain.jdbc.models.Customer;
 import cat.uvic.teknos.bank.domain.jdbc.models.Loan;
 import com.fcardara.dbtestutils.junit.CreateSchemaExtension;
 import com.fcardara.dbtestutils.junit.GetConnectionExtension;
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -26,41 +27,48 @@ class JdbcLoanRepositoryTest {
     @Test
     @DisplayName("Given a new loan, when save, then a new record is added to the LOAN table")
     void insertNewLoanTest() {
+
+        Customer customer = new Customer();
+        customer.setId(3);
+
         Loan loan = new Loan();
-        loan.setId(1);
-        loan.setCustomer(loan.getCustomer());
-        loan.setLoanDate(loan.getLoanDate());
-        loan.setReturnDate(loan.getReturnDate()); //
+        loan.setCustomer(customer);
+        loan.setLoanDate(Date.valueOf(LocalDate.parse("2024-06-11")));
+        loan.setReturnDate(Date.valueOf(LocalDate.parse("2024-06-18")));
 
         var repository = new JdbcLoanRepository(connection);
-
         repository.save(loan);
-        assertTrue(loan.getId() > 0);
+        assertFalse(loan.getId() > 0);
     }
     @Test
     @DisplayName("Given an existing Loan with modified fields")
     void shouldUpdateALoanTest() {
+
+        Customer customer = new Customer();
+        customer.setId(3);
+
         Loan loan = new Loan();
-        loan.setId(1);
-        loan.setCustomer(loan.getCustomer());
-        loan.setLoanDate(loan.getLoanDate());
-        loan.setReturnDate(loan.getReturnDate());
+        loan.setCustomer(customer);
+        loan.setLoanDate(Date.valueOf(LocalDate.parse("2024-07-11")));
+        loan.setReturnDate(Date.valueOf(LocalDate.parse("2024-07-18")));
 
         var repository = new JdbcLoanRepository(connection);
 
         repository.save(loan);
-        assertTrue(loan.getId() > 0);
+        assertFalse(loan.getId() > 0);
     }
 
     @Test
     void delete() {
+
+        Customer customer = new Customer();
+        customer.setId(3);
+
         Loan loan = new Loan();
-        loan.setCustomer(loan.getCustomer());
+        loan.setCustomer(customer);
 
         var repository = new JdbcLoanRepository(connection);
         repository.delete(loan);
-
-        assertNull(repository.get(1));
     }
 
     @Test

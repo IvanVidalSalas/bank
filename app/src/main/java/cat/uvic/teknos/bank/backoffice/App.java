@@ -5,16 +5,35 @@ package cat.uvic.teknos.bank.backoffice;
 
 import cat.uvic.teknos.bank.domain.jdbc.models.JdbcModelFactory;
 import cat.uvic.teknos.bank.domain.jdbc.repositories.JdbcRepositoryFactory;
+import cat.uvic.teknos.bank.domain.jpa.models.JpaModelFactory;
+import cat.uvic.teknos.bank.domain.jpa.repositories.JpaRepositoryFactory;
 import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.RepositoryFactory;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class App {
 
     public static void main(String[] args) {
+
+        showBanner();
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+
         RepositoryFactory repositoryFactory = new JdbcRepositoryFactory();
         ModelFactory modelFactory = new JdbcModelFactory();
         var backOffice = new BackOffice(System.in, System.out, repositoryFactory, modelFactory);
 
         backOffice.start();
+    }
+    private static void showBanner() {
+        var bannerStream = App.class.getResourceAsStream("/banner.txt");
+
+        var banner = new BufferedReader(new InputStreamReader(bannerStream))
+                .lines().collect(Collectors.joining("\n"));
+
+        System.out.println(banner);
     }
 }

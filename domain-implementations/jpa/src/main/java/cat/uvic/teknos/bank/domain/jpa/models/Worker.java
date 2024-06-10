@@ -32,8 +32,6 @@ public class Worker implements cat.uvic.teknos.bank.models.Worker{
     public int getId() { return id; }
     @Override
     public void setId(int id) { this.id = id; }
-
-
     @Override
     public String getFirstName() { return firstName; }
     @Override

@@ -1,7 +1,6 @@
 package cat.uvic.teknos.bank.domain.jdbc.repositories;
 
 import cat.uvic.teknos.bank.models.Customer;
-import cat.uvic.teknos.bank.models.Loan;
 import cat.uvic.teknos.bank.repositories.CustomerRepository;
 
 import java.sql.Connection;
@@ -67,7 +66,6 @@ public class JdbcCustomerRepository implements CustomerRepository {
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public Customer get(Integer Id) {

@@ -4,6 +4,7 @@ import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.AccountRepository;
 import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciithemes.a7.A7_Grids;
 import de.vandermeer.skb.interfaces.document.TableRowStyle;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
@@ -26,8 +27,8 @@ public class AccountsManager {
         this.modelFactory = modelFactory;
     }
     public void start() {
-        out.println("Accounts");
-        out.println("Type:");
+
+        out.println("\nWhat would you like to do?\n");
         out.println("1 to insert a new Account");
         out.println("2 to update a Account");
         out.println("3 to delete a Account");
@@ -48,8 +49,7 @@ public class AccountsManager {
             }
         }
         while (!command.equals("exit"));
-
-        out.println("Bye!");
+        out.println("\nSelect a menu option or type 'exit' to exit the application:");
     }
 
     private void insert() {
@@ -69,18 +69,23 @@ public class AccountsManager {
         account.setBalance(Integer.parseInt(readLine(in)));
 
         accountRepository.save(account);
-
-        out.println("Inserted Account successfully" + account);
+        out.println("Inserted Account successfully " + account);
+        start();
     }
 
     private void update() {
 
         var account = modelFactory.createAccount();
 
+        out.println("Enter the id of the account you want to update:");
+        int id = Integer.parseInt(readLine(in));
+        account = accountRepository.get(id);
+
         out.println("Update the customer id:");
         int customerId = Integer.parseInt(readLine(in));
         Customer customer = modelFactory.createCustomer();
         customer.setId(customerId);
+        account.setCustomer(customer);
 
         out.println("Update account type:");
         String accountType = readLine(in);
@@ -92,8 +97,9 @@ public class AccountsManager {
         int balance = Integer.parseInt(readLine(in));
         account.setBalance(balance);
 
-
         accountRepository.save(account);
+        out.println("Updated Account successfully " + account);
+        start();
     }
 
     private void delete(){
@@ -104,11 +110,13 @@ public class AccountsManager {
         int id = Integer.parseInt(readLine(in));
         account.setId(id);
         accountRepository.delete(account);
+        out.println("Deleted Account successfully " + account);
+        start();
     }
 
     private void get(){
 
-        out.println("Please enter the customer: ");
+        out.println("Please enter the account id: ");
         int id = Integer.parseInt(readLine(in));
 
         var account = accountRepository.get(id);
@@ -116,8 +124,11 @@ public class AccountsManager {
         if (account == null) {
             out.println("Account not found!");
         } else {
-            out.println("Account Details:");
-            out.println(account);
+            out.println("Account:");
+            out.println("Customer id: " + account.getCustomer().getId());
+            out.println("Account type: " + account.getAccountType());
+            out.println("Balance: " + account.getBalance());
+            start();
         }
     }
     
@@ -133,8 +144,10 @@ public class AccountsManager {
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);
+        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
         String render = asciiTable.render();
         System.out.println(render);
+        start();
     }
 
 

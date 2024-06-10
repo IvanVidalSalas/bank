@@ -27,9 +27,9 @@ class JdbcCustomerRepositoryTest {
 
         Customer customer = new Customer();
         customer.setFirstName("Ivan");
-        customer.setLastName("Doe");
+        customer.setLastName("Vidal");
         customer.setAddress("123 Main St");
-        customer.setEmail("john@example.com");
+        customer.setEmail("ivan@example.com");
 
         var repository = new JdbcCustomerRepository(connection);
         repository.save(customer);
@@ -41,7 +41,7 @@ class JdbcCustomerRepositoryTest {
     void shouldUpdateACustomerTest() {
 
         Customer customer = new Customer();
-        customer.setId(4);
+        customer.setId(5);
         customer.setFirstName("Jane");
         customer.setLastName("Doe");
         customer.setAddress("456 Elm St");

@@ -1,8 +1,11 @@
+
 USE BANK;
 
 INSERT INTO CUSTOMER (CUSTOMER_ID, FIRST_NAME, LAST_NAME, ADDRESS, EMAIL) VALUES
     (1, 'Carla', 'Piñeyro', 'Carrer Llobregat', 'carlapiñeyro@gmail.com'),
-    (2, 'Ariel', 'Espiro', 'Carrer Girona', 'arielespiro@gmail.com');
+    (2, 'Ariel', 'Espiro', 'Carrer Girona', 'arielespiro@gmail.com'),
+    (3, 'Joel', 'Margenet', 'Carrer Taradell', 'joelmargenet@gmail.com'),
+    (4, 'Pau', 'Font', 'Carrer Major', 'paufont@gmail.com');
 
 
 INSERT INTO ACCOUNT (ACCOUNT_ID, CUSTOMER_ID, ACCOUNT_TYPE, BALANCE) VALUES

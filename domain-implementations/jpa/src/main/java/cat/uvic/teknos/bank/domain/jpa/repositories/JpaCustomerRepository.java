@@ -40,15 +40,6 @@ public class JpaCustomerRepository implements CustomerRepository {
                 if(model.getEmail().isEmpty() || model.getEmail()==null){
                     model.setEmail(customer.getEmail());
                 }
-                if (model.getLoan() == null) {
-                    model.setLoan(customer.getLoan());
-                }
-                if (model.getTransaction() == null) {
-                    model.setTransaction(customer.getTransaction());
-                }
-                if (model.getAccount() == null) {
-                    model.setAccount(customer.getAccount());
-                }
 
                 entityManager.merge(model);
             }
