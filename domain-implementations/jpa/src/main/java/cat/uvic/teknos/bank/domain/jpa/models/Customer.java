@@ -5,6 +5,7 @@ import cat.uvic.teknos.bank.models.Transaction;
 import cat.uvic.teknos.bank.models.Account;
 import jakarta.persistence.*;
 
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public class Customer implements cat.uvic.teknos.bank.models.Customer {
             targetEntity = Loan.class)
     @PrimaryKeyJoinColumn
     private Account account;
+
     @OneToMany(
             mappedBy = "artist",
             cascade = CascadeType.ALL,

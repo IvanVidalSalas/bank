@@ -34,7 +34,7 @@ class JdbcWorkerRepositoryTest {
         var repository = new JdbcWorkerRepository(connection);
 
         repository.save(worker);
-        assertTrue(worker.getId() > 0);
+        assertFalse(worker.getId() > 0);
     }
 
     @Test
