@@ -1,5 +1,6 @@
 package cat.uvic.teknos.bank.services;
 
+import cat.uvic.teknos.bank.services.exception.ServerException;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpOptions;
 
@@ -31,7 +32,7 @@ public class Server {
                 }
             }
         } catch (IOException e) {
-            //throw new ServerException(e); he de crear una nova excepcio copiant una de les existents
+            throw new ServerException(e);
         }
     }
 }

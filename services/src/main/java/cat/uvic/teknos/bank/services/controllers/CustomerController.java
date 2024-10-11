@@ -7,7 +7,7 @@ import cat.uvic.teknos.bank.repositories.RepositoryFactory;
 import org.gradle.internal.impldep.com.fasterxml.jackson.core.JsonProcessingException;
 import org.gradle.internal.impldep.com.fasterxml.jackson.databind.ObjectMapper;
 
-public class CustomerController implements Controller<Integer, Customer> {
+public class CustomerController implements Controller {
 
     private RepositoryFactory repositoryFactory;
     private ModelFactory modelFactory ;
@@ -18,19 +18,19 @@ public class CustomerController implements Controller<Integer, Customer> {
     }
 
     @Override
-    public void delete(Integer key) {
+    public void delete(int id) {
 
     }
 
     @Override
-    public void put(Integer key, Customer value) {
+    public void put(int id, String json) {
 
     }
 
     @Override
-    public void post(Customer value) {
+    public void post(String json) {
         //afegir customer
-        repositoryFactory.getCustomerRepository().save(value);
+        //repositoryFactory.getCustomerRepository().save(value);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CustomerController implements Controller<Integer, Customer> {
     }
 
     @Override
-    public String get(Integer integer) {
+    public String get(int id) {
 
         //retrieve (get) student from db
         // serialize student in json format

@@ -62,34 +62,23 @@ public class RequestRouterImplementation implements RequestRouter {
     private String manageCustomers(RawHttpRequest request, String method, String[] pathParts, String responseJsonBody) {
         var controller = controllers.get(pathParts[1]);
 
-        if (method == "POST") {
+        if (method.equals("POST")) {
             var studentJson = request.getBody().get().toString();
-            var mapper = new ObjectMapper();
-            try {
-                var customer = mapper.readValue(studentJson, Customer.class);
-                controller.post(customer);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        } else if (method == "GET" && pathParts.length == 2) {
+            controller.post(studentJson);
+
+        } else if (method.equals("GET") && pathParts.length == 2) {
             responseJsonBody = controller.get();
 
-        } else if (method == "DELETE") {
-            var customerId = Integer.parseInt(pathParts[2]);
-            controller.delete(customerId);
-
-        } else if (method == "PUT") {
-            var customerId = Integer.parseInt(pathParts[2]);
+        } else if (method.equals("DELETE")) {
+            var studentId = Integer.parseInt(pathParts[2]);
+            controller.delete(studentId);
+        } else if (method.equals("PUT")) {
+            var studentId = Integer.parseInt(pathParts[2]);
             var mapper = new ObjectMapper();
 
-            try {
-                var studentJson = request.getBody().get().toString();
-                var customer = mapper.readValue(studentJson, Customer.class);
-                controller.put(customerId, customer);
+            var studentJson = request.getBody().get().toString();
+            controller.put(studentId, studentJson);
 
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
         }
         return responseJsonBody;
     }
