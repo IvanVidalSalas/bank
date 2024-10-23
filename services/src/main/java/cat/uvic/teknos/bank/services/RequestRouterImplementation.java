@@ -5,8 +5,9 @@ import cat.uvic.teknos.bank.services.controllers.Controller;
 import cat.uvic.teknos.bank.services.controllers.CustomerController;
 import cat.uvic.teknos.bank.services.exception.ResourceNotFoundException;
 import cat.uvic.teknos.bank.services.exception.ServerErrorException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gradle.internal.impldep.com.fasterxml.jackson.core.JsonProcessingException;
-import org.gradle.internal.impldep.com.fasterxml.jackson.databind.ObjectMapper;
+
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
 import rawhttp.core.RawHttpResponse;
@@ -72,6 +73,7 @@ public class RequestRouterImplementation implements RequestRouter {
         } else if (method.equals("DELETE")) {
             var studentId = Integer.parseInt(pathParts[2]);
             controller.delete(studentId);
+
         } else if (method.equals("PUT")) {
             var studentId = Integer.parseInt(pathParts[2]);
             var mapper = new ObjectMapper();

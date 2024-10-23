@@ -21,7 +21,7 @@ public class Server {
 
         try(var serverSocket = new ServerSocket(PORT)) {
             while (!SHUTDOWN_SERVER) {
-                //espera la peticio del client
+                //Espera la peticio del client
                 try (var clientSocket = serverSocket.accept()) {
                     var rawHttp = new RawHttp(RawHttpOptions.newBuilder().doNotInsertHostHeaderIfMissing().build());
                     var request = rawHttp.parseRequest(clientSocket.getInputStream());

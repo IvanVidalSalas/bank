@@ -4,6 +4,7 @@ import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.RepositoryFactory;
 import cat.uvic.teknos.bank.services.controllers.Controller;
 import cat.uvic.teknos.bank.services.controllers.CustomerController;
+import cat.uvic.teknos.bank.services.controllers.LoanController;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +25,8 @@ public class App {
         var controllers = new HashMap<String, Controller>();
 
         // TODO: review how to deserialize json objects
-        controllers.put("students", new CustomerController(repositoryFactory, modelFactory));
+        controllers.put("customers", new CustomerController(repositoryFactory, modelFactory));
+        controllers.put("loans", new LoanController(repositoryFactory, modelFactory));
 
         var requestRouter = new RequestRouterImplementation(controllers);
         new Server(requestRouter)

@@ -126,7 +126,7 @@ public class CustomersManager {
     }
 
     private void get(){
-
+        
         out.println("Please enter the customer id: ");
         int id = Integer.parseInt(readLine(in));
 
