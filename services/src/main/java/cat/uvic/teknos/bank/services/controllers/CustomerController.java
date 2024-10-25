@@ -9,33 +9,31 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CustomerController implements Controller {
-
     private RepositoryFactory repositoryFactory;
     private ModelFactory modelFactory;
     private ObjectMapper mapper = new ObjectMapper();
-    private CustomerRepository repository;
+    private CustomerRepository customerRepository;
 
-    public CustomerController(RepositoryFactory repositoryFactory, ModelFactory modelFactory) {
+    public CustomerController(RepositoryFactory repositoryFactory) {
         this.repositoryFactory = repositoryFactory;
-        this.modelFactory = modelFactory;
-        this.repository = repositoryFactory.getCustomerRepository();
-
+        //this.modelFactory = modelFactory;
+        this.customerRepository = repositoryFactory.getCustomerRepository();
     }
 
     @Override
     public void delete(int id) {
-        Customer customer = repository.get(id);
+        Customer customer = customerRepository.get(id);
         if (customer == null) {
-            throw new ResourceNotFoundException("Customer with id " + id + " not found");
+            throw new ResourceNotFoundException("Customer" + id + " not found");
         }
-        repository.delete(customer);
+        customerRepository.delete(customer);
     }
 
     @Override
     public void put(int id, String json) {
-        Customer customer = repository.get(id);
+        Customer customer = customerRepository.get(id);
         if (customer == null) {
-            throw new ResourceNotFoundException("Customer with id " + id + " not found");
+            throw new ResourceNotFoundException("Customer " + id + " not found");
         }
         try {
             // Deserialize JSON to Customer object
@@ -49,8 +47,7 @@ public class CustomerController implements Controller {
             customer.setAccount(updatedCustomer.getAccount());
             customer.setTransaction(updatedCustomer.getTransaction());
 
-
-            repository.save(customer);
+            customerRepository.save(customer);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to parse customer JSON", e);
         }
@@ -61,7 +58,7 @@ public class CustomerController implements Controller {
         try {
             // Deserialize JSON to Customer object
             Customer newCustomer = mapper.readValue(json, Customer.class);
-            repository.save(newCustomer);
+            customerRepository.save(newCustomer);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to parse customer JSON", e);
         }
@@ -69,7 +66,7 @@ public class CustomerController implements Controller {
 
     @Override
     public String get() {
-        var customers = repository.getAll();
+        var customers = customerRepository.getAll();
         try {
             return mapper.writeValueAsString(customers);
         } catch (JsonProcessingException e) {
@@ -79,9 +76,9 @@ public class CustomerController implements Controller {
 
     @Override
     public String get(int id) {
-        Customer customer = repository.get(id);
+        Customer customer = customerRepository.get(id);
         if (customer == null) {
-            throw new ResourceNotFoundException("Customer with id " + id + " not found");
+            throw new ResourceNotFoundException("Customer " + id + " not found");
         }
         try {
             return mapper.writeValueAsString(customer);

@@ -8,10 +8,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public class Server {
-
-    public final int PORT = 80;
+    public final int PORT = 3009;
     private final RequestRouter requestRouter;
-    private boolean SHUTDOWN_SERVER;
+    private boolean SHUTDOWN_SERVER = false;
 
     public Server(RequestRouter requestRouter) {
         this.requestRouter = requestRouter;
@@ -20,6 +19,7 @@ public class Server {
     public void start() {
 
         try(var serverSocket = new ServerSocket(PORT)) {
+
             while (!SHUTDOWN_SERVER) {
                 //Espera la peticio del client
                 try (var clientSocket = serverSocket.accept()) {
@@ -32,7 +32,7 @@ public class Server {
                 }
             }
         } catch (IOException e) {
-            throw new ServerException(e);
+            throw new ServerException("Couldn't start the server", e);
         }
     }
 }

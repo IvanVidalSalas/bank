@@ -1,0 +1,37 @@
+###
+# Create New Account
+POST http://localhost:3009/account
+Content-Type: application/json
+
+{
+  "accountType": "Savings",
+  "balance": 1500,
+  "customerId": 1,
+  "workerIds": [2, 3]
+}
+
+###
+# Update Account
+PUT http://localhost:3009/account/1
+Content-Type: application/json
+
+{
+  "accountType": "Checking",
+  "balance": 2000,
+  "customerId": 1,
+  "workerIds": [2, 4]
+}
+
+###
+# Get Account
+GET http://localhost:3009/account/1
+Accept: application/json
+
+###
+# Get All Accounts
+GET http://localhost:3009/account
+Accept: application/json
+
+###
+# Delete Account
+DELETE http://localhost:3009/account/2

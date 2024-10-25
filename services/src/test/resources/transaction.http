@@ -1,0 +1,39 @@
+###
+# Create New Transaction
+POST http://localhost:3009/transaction
+Content-Type: application/json
+
+{
+  "transactionType": "Deposit",
+  "amount": 1000,
+  "transactionDate": "2024-10-01",
+  "customerId": 1,
+  "workerId": 2
+}
+
+###
+# Update Transaction
+PUT http://localhost:3009/transaction/1
+Content-Type: application/json
+
+{
+  "transactionType": "Withdrawal",
+  "amount": 500,
+  "transactionDate": "2024-10-15",
+  "customerId": 1,
+  "workerId": 2
+}
+
+###
+# Get Transaction
+GET http://localhost:3009/transaction/1
+Accept: application/json
+
+###
+# Get All Transactions
+GET http://localhost:3009/transaction
+Accept: application/json
+
+###
+# Delete Transaction
+DELETE http://localhost:3009/transaction/2

@@ -15,12 +15,12 @@ public class LoanController implements Controller {
     private RepositoryFactory repositoryFactory;
     private ModelFactory modelFactory;
     private ObjectMapper mapper = new ObjectMapper();
-    private LoanRepository loanRepository; // Use LoanRepository
+    private LoanRepository loanRepository;
 
-    public LoanController(RepositoryFactory repositoryFactory, ModelFactory modelFactory) {
+    public LoanController(RepositoryFactory repositoryFactory) {
         this.repositoryFactory = repositoryFactory;
-        this.modelFactory = modelFactory;
-        this.loanRepository = repositoryFactory.getLoanRepository(); // Initialize LoanRepository
+        //this.modelFactory = modelFactory;
+        this.loanRepository = repositoryFactory.getLoanRepository();
     }
 
     @Override

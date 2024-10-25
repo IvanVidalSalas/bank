@@ -1,0 +1,37 @@
+###
+# Create New Worker
+POST http://localhost:3009/worker
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "transactionId": 1,
+  "accountId": 1
+}
+
+###
+# Update Worker
+PUT http://localhost:3009/worker/1
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "transactionId": 2,
+  "accountId": 1
+}
+
+###
+# Get Worker
+GET http://localhost:3009/worker/1
+Accept: application/json
+
+###
+# Get All Workers
+GET http://localhost:3009/worker
+Accept: application/json
+
+###
+## Delete Worker
+DELETE http://localhost:3009/worker/2

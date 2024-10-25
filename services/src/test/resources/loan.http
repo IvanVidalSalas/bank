@@ -1,13 +1,10 @@
 ###
-# Create New Customer
+# Create New loan
 POST http://localhost:3009/customer
 Content-Type: application/json
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "address": "123 Main St",
-  "email": "john.doe@example.com",
+  "customerId": 1,
   "loan": {
     "loanDate": "2024-10-01",
     "returnDate": "2024-11-01"
@@ -15,16 +12,12 @@ Content-Type: application/json
 }
 
 ###
-# Update Customer
+# Update Loan
 PUT http://localhost:3009/customer/1
 Content-Type: application/json
 
 {
-  "id": 1,
-  "firstName": "Jane",
-  "lastName": "Doe",
-  "address": "123 Elm St",
-  "email": "jane.doe@example.com",
+  "customerId": 1,
   "loan": {
     "loanDate": "2024-09-15",
     "returnDate": "2024-11-15"
@@ -32,15 +25,15 @@ Content-Type: application/json
 }
 
 ###
-# Get Customer
+# Get Loan
 GET http://localhost:3009/customer/1
 Accept: application/json
 
 ###
-# Get All Customers
+# Get All Loans
 GET http://localhost:3009/customer
 Accept: application/json
 
 ###
-# Delete Customer
-DELETE http://localhost:3009/customer/4
+# Delete Loan
+DELETE http://localhost:3009/customer/2
