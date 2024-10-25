@@ -1,37 +1,57 @@
 ###
 # Create New Account
-POST http://localhost:3009/account
+POST http://localhost:8080/account
 Content-Type: application/json
 
 {
-  "accountType": "Savings",
-  "balance": 1500,
-  "customerId": 1,
-  "workerIds": [2, 3]
+
+  "accountType": "Checking",
+  "balance": 4500,
+  "customer": {
+    "id": 3,
+    "firstName": null,
+    "lastName": null,
+    "address": null,
+    "email": null,
+    "loan": null,
+    "account": null,
+    "transaction": null
+  },
+  "worker": null
 }
 
 ###
 # Update Account
-PUT http://localhost:3009/account/1
+PUT http://localhost:8080/account/5
 Content-Type: application/json
 
 {
+  "id": 5,
   "accountType": "Checking",
-  "balance": 2000,
-  "customerId": 1,
-  "workerIds": [2, 4]
+  "balance": 7000,
+  "customer": {
+    "id": 2,
+    "firstName": null,
+    "lastName": null,
+    "address": null,
+    "email": null,
+    "loan": null,
+    "account": null,
+    "transaction": null
+  },
+  "worker": null
 }
 
 ###
 # Get Account
-GET http://localhost:3009/account/1
+GET http://localhost:8080/account/4
 Accept: application/json
 
 ###
 # Get All Accounts
-GET http://localhost:3009/account
+GET http://localhost:8080/account
 Accept: application/json
 
 ###
 # Delete Account
-DELETE http://localhost:3009/account/2
+DELETE http://localhost:8080/account/3

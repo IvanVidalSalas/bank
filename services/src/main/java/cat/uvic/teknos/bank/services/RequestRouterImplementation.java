@@ -27,51 +27,64 @@ public class RequestRouterImplementation implements RequestRouter {
         var path = request.getUri().getPath();
         var pathParts = path.split("/");
         var method = request.getMethod();
-        var controllerName =  pathParts[1];
+        var controllerName = pathParts[1];
         var responseJsonBody = "";
         RawHttpResponse<?> response;
 
-        switch (controllerName) {
-            case "customer":
-                responseJsonBody = manageCustomers(request, method, pathParts, responseJsonBody);
-                break;
-            case "loan":
-                responseJsonBody = manageLoans(request, method, pathParts, responseJsonBody);
-                break;
-            case "account":
-                responseJsonBody = manageAccounts(request, method, pathParts, responseJsonBody);
-                break;
-            case "worker":
-                responseJsonBody = manageWorkers(request, method, pathParts, responseJsonBody);
-                break;
-            case "transaction":
-                responseJsonBody = manageTransactions(request, method, pathParts, responseJsonBody);
-                break;
-            default:
-                throw new ResourceNotFoundException("Unknown controller: " + controllerName);
-        }
-
         try {
-
-            response = rawHttp.parseResponse("HTTP/1.1 200 OK\r\n" +
-                    "Content-Type: application/json\r\n" +
-                    "Content-Length: " + responseJsonBody.length() + "\r\n" +
-                    "\r\n" +
-                    responseJsonBody);
-        } catch (ResourceNotFoundException exception) {
+            switch (controllerName) {
+                case "customer":
+                    responseJsonBody = manageCustomers(request, method, pathParts, responseJsonBody);
+                    break;
+                case "loan":
+                    responseJsonBody = manageLoans(request, method, pathParts, responseJsonBody);
+                    break;
+                case "account":
+                    responseJsonBody = manageAccounts(request, method, pathParts, responseJsonBody);
+                    break;
+                case "worker":
+                    responseJsonBody = manageWorkers(request, method, pathParts, responseJsonBody);
+                    break;
+                case "transaction":
+                    responseJsonBody = manageTransactions(request, method, pathParts, responseJsonBody);
+                    break;
+                default:
+                    throw new ResourceNotFoundException("Unknown controller: " + controllerName);
+            }
+        } catch (ResourceNotFoundException e) {
             response = rawHttp.parseResponse("HTTP/1.1 404 Not Found\r\n" +
                     "Content-Type: application/json\r\n" +
                     "Content-Length: 0\r\n" +
                     "\r\n");
-        } catch (ServerErrorException exception) {
+            return response;
+        } catch (ServerErrorException e) {
             response = rawHttp.parseResponse("HTTP/1.1 500 Internal Server Error\r\n" +
                     "Content-Type: application/json\r\n" +
                     "Content-Length: 0\r\n" +
                     "\r\n");
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace(); // log the error for debugging
+            response = rawHttp.parseResponse("HTTP/1.1 500 Internal Server Error\r\n" +
+                    "Content-Type: application/json\r\n" +
+                    "Content-Length: 0\r\n" +
+                    "\r\n");
+            return response;
         }
-        return response;
+        try {
+            return rawHttp.parseResponse("HTTP/1.1 200 OK\r\n" +
+                    "Content-Type: application/json\r\n" +
+                    "Content-Length: " + responseJsonBody.length() + "\r\n" +
+                    "\r\n" +
+                    responseJsonBody);
+        } catch (Exception e) {
+            e.printStackTrace(); // log the error for debugging
+            return rawHttp.parseResponse("HTTP/1.1 500 Internal Server Error\r\n" +
+                    "Content-Type: application/json\r\n" +
+                    "Content-Length: 0\r\n" +
+                    "\r\n");
+        }
     }
-
 
     private String manageCustomers(RawHttpRequest request, String method, String[] pathParts, String responseJsonBody) {
 

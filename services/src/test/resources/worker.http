@@ -1,37 +1,58 @@
 ###
 # Create New Worker
-POST http://localhost:3009/worker
+POST http://localhost:8080/worker
 Content-Type: application/json
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "transactionId": 1,
-  "accountId": 1
+
+  "firstName": "Silviu",
+  "lastName": "Balint",
+  "transaction": [
+    {
+      "id": 12,
+      "transactionType": null,
+      "amount": 100,
+      "transactionDate": null,
+      "customer": null,
+      "worker": null
+    }
+  ],
+  "account": null
 }
+
 
 ###
 # Update Worker
-PUT http://localhost:3009/worker/1
+PUT http://localhost:8080/worker/6
 Content-Type: application/json
 
 {
-  "firstName": "Jane",
-  "lastName": "Doe",
-  "transactionId": 2,
-  "accountId": 1
+  "id": 6,
+  "firstName": "Silviu",
+  "lastName": "Balint",
+  "transaction": [
+    {
+      "id": 10,
+      "transactionType": null,
+      "amount": 150,
+      "transactionDate": null,
+      "customer": null,
+      "worker": null
+    }
+  ],
+  "account": null
 }
 
 ###
 # Get Worker
-GET http://localhost:3009/worker/1
+GET http://localhost:8080/worker/5
 Accept: application/json
 
 ###
 # Get All Workers
-GET http://localhost:3009/worker
+GET http://localhost:8080/worker
 Accept: application/json
 
 ###
 ## Delete Worker
-DELETE http://localhost:3009/worker/2
+DELETE http://localhost:8080/worker/6

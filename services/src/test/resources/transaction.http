@@ -1,39 +1,59 @@
 ###
 # Create New Transaction
-POST http://localhost:3009/transaction
+POST http://localhost:8080/transaction
 Content-Type: application/json
 
 {
-  "transactionType": "Deposit",
-  "amount": 1000,
-  "transactionDate": "2024-10-01",
-  "customerId": 1,
-  "workerId": 2
+
+  "transactionType": "Withdrawal",
+  "amount": 5000,
+  "transactionDate": 1707087600000,
+  "customer": {
+    "id": 2,
+    "firstName": null,
+    "lastName": null,
+    "address": null,
+    "email": null,
+    "loan": null,
+    "account": null,
+    "transaction": null
+  },
+  "worker": null
 }
 
 ###
 # Update Transaction
-PUT http://localhost:3009/transaction/1
+PUT http://localhost:8080/transaction/11
 Content-Type: application/json
 
 {
+  "id": 11,
   "transactionType": "Withdrawal",
-  "amount": 500,
-  "transactionDate": "2024-10-15",
-  "customerId": 1,
-  "workerId": 2
+  "amount": 5500,
+  "transactionDate": 1707087600000,
+  "customer": {
+    "id": 2,
+    "firstName": null,
+    "lastName": null,
+    "address": null,
+    "email": null,
+    "loan": null,
+    "account": null,
+    "transaction": null
+  },
+  "worker": null
 }
 
 ###
 # Get Transaction
-GET http://localhost:3009/transaction/1
+GET http://localhost:8080/transaction/10
 Accept: application/json
 
 ###
 # Get All Transactions
-GET http://localhost:3009/transaction
+GET http://localhost:8080/transaction
 Accept: application/json
 
 ###
 # Delete Transaction
-DELETE http://localhost:3009/transaction/2
+DELETE http://localhost:8080/transaction/2

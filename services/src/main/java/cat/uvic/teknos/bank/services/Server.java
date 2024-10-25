@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public class Server {
-    public final int PORT = 3009;
+    public final int PORT = 8080;
     private final RequestRouter requestRouter;
     private boolean SHUTDOWN_SERVER = false;
 
@@ -17,14 +17,14 @@ public class Server {
     }
 
     public void start() {
-
+        System.out.println("Starting server... " + PORT);
         try(var serverSocket = new ServerSocket(PORT)) {
 
             while (!SHUTDOWN_SERVER) {
                 //Espera la peticio del client
                 try (var clientSocket = serverSocket.accept()) {
                     var rawHttp = new RawHttp(RawHttpOptions.newBuilder().doNotInsertHostHeaderIfMissing().build());
-                    var request = rawHttp.parseRequest(clientSocket.getInputStream());
+                    var request = rawHttp.parseRequest(clientSocket.getInputStream()).eagerly();
 
                     var response = requestRouter.execRequest(request);
 

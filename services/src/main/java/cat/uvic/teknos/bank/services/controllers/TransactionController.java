@@ -1,23 +1,24 @@
 package cat.uvic.teknos.bank.services.controllers;
 
+import cat.uvic.teknos.bank.models.Account;
 import cat.uvic.teknos.bank.models.Transaction;
-import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.TransactionRepository;
 import cat.uvic.teknos.bank.repositories.RepositoryFactory;
 import cat.uvic.teknos.bank.services.exception.ResourceNotFoundException;
+import cat.uvic.teknos.bank.services.utils.Mappers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TransactionController implements Controller {
-    private final RepositoryFactory repositoryFactory;
+    //private final RepositoryFactory repositoryFactory;
     //private final ModelFactory modelFactory;
     private final ObjectMapper mapper = new ObjectMapper();
     private final TransactionRepository transactionRepository;
 
-    public TransactionController(RepositoryFactory repositoryFactory) {
-        this.repositoryFactory = repositoryFactory;
+    public TransactionController(TransactionRepository transactionRepository) {
+        //this.repositoryFactory = repositoryFactory;
         //this.modelFactory = modelFactory;
-        this.transactionRepository = repositoryFactory.getTransactionRepository();
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class TransactionController implements Controller {
         }
         try {
             // Deserialize JSON to Transaction object
-            Transaction updatedTransaction = mapper.readValue(json, Transaction.class);
+            var updatedTransaction = Mappers.get().readValue(json, Transaction.class);
 
             transaction.setTransactionType(updatedTransaction.getTransactionType());
             transaction.setAmount(updatedTransaction.getAmount());
@@ -55,7 +56,7 @@ public class TransactionController implements Controller {
     public void post(String json) {
         try {
             // Deserialize JSON to Transaction object
-            Transaction newTransaction = mapper.readValue(json, Transaction.class);
+            var newTransaction = Mappers.get().readValue(json, Transaction.class);
             transactionRepository.save(newTransaction);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to parse transaction JSON: " + e.getMessage(), e);

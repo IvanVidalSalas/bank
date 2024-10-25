@@ -1,23 +1,24 @@
 package cat.uvic.teknos.bank.services.controllers;
 
+import cat.uvic.teknos.bank.models.Account;
 import cat.uvic.teknos.bank.models.Worker;
-import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.WorkerRepository;
 import cat.uvic.teknos.bank.repositories.RepositoryFactory;
 import cat.uvic.teknos.bank.services.exception.ResourceNotFoundException;
+import cat.uvic.teknos.bank.services.utils.Mappers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class WorkerController implements Controller {
-    private final RepositoryFactory repositoryFactory;
+    //private final RepositoryFactory repositoryFactory;
     //private final ModelFactory modelFactory;
     private final ObjectMapper mapper = new ObjectMapper();
     private final WorkerRepository workerRepository;
 
-    public WorkerController(RepositoryFactory repositoryFactory) {
-        this.repositoryFactory = repositoryFactory;
+    public WorkerController(WorkerRepository workerRepository) {
+        //this.repositoryFactory = repositoryFactory;
         //this.modelFactory = modelFactory;
-        this.workerRepository = repositoryFactory.getWorkerRepository();
+        this.workerRepository = workerRepository;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class WorkerController implements Controller {
         }
         try {
             // Deserialize JSON to Worker object
-            Worker updatedWorker = mapper.readValue(json, Worker.class);
+            var updatedWorker = Mappers.get().readValue(json, Worker.class);
 
             worker.setFirstName(updatedWorker.getFirstName());
             worker.setLastName(updatedWorker.getLastName());
@@ -54,7 +55,7 @@ public class WorkerController implements Controller {
     public void post(String json) {
         try {
             // Deserialize JSON to Worker object
-            Worker newWorker = mapper.readValue(json, Worker.class);
+            var newWorker = Mappers.get().readValue(json, Worker.class);
             workerRepository.save(newWorker);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to parse worker JSON: " + e.getMessage(), e);
