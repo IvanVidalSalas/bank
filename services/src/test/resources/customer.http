@@ -12,11 +12,11 @@ Content-Type: application/json
 
 ###
 # Update Customer
-PUT http://localhost:8080/customer/1
+PUT http://localhost:8080/customer/5
 Content-Type: application/json
 
 {
-  "id": 1,
+  "id": 5,
   "firstName": "Jane",
   "lastName": "Doe",
   "address": "123 Elm St",
@@ -35,4 +35,4 @@ Accept: application/json
 
 ###
 # Delete Customer
-DELETE http://localhost:8080/customer/7
+DELETE http://localhost:8080/customer/8

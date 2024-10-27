@@ -40,7 +40,7 @@ public class Worker implements cat.uvic.teknos.bank.models.Worker{
     }
 
     @Override
-    public Set<Transaction> getTransaction() { return transactions;   }
+    public Set<Transaction> getTransaction() { return transactions; }
     @Override
     public void setTransaction(Set <Transaction> transaction) { this.transactions = transaction; }
 

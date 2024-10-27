@@ -4,7 +4,6 @@ POST http://localhost:8080/transaction
 Content-Type: application/json
 
 {
-
   "transactionType": "Withdrawal",
   "amount": 5000,
   "transactionDate": 1707087600000,
@@ -28,7 +27,7 @@ Content-Type: application/json
 
 {
   "id": 11,
-  "transactionType": "Withdrawal",
+  "transactionType": "Deposit",
   "amount": 5500,
   "transactionDate": 1707087600000,
   "customer": {
@@ -56,4 +55,4 @@ Accept: application/json
 
 ###
 # Delete Transaction
-DELETE http://localhost:8080/transaction/2
+DELETE http://localhost:8080/transaction/12

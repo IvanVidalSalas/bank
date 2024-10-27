@@ -2,55 +2,45 @@ package cat.uvic.teknos.bank.services.controllers;
 
 import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.Loan;
-import cat.uvic.teknos.bank.models.ModelFactory;
-import cat.uvic.teknos.bank.repositories.LoanRepository; // Import LoanRepository
-import cat.uvic.teknos.bank.repositories.RepositoryFactory;
+import cat.uvic.teknos.bank.repositories.LoanRepository;
 import cat.uvic.teknos.bank.services.exception.ResourceNotFoundException;
 import cat.uvic.teknos.bank.services.utils.Mappers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Optional;
-
 public class LoanController implements Controller {
 
-    //private RepositoryFactory repositoryFactory;
-    //private ModelFactory modelFactory;
     private ObjectMapper mapper = new ObjectMapper();
     private LoanRepository loanRepository;
 
     public LoanController(LoanRepository loanRepository) {
-        //this.repositoryFactory = repositoryFactory;
-        //this.modelFactory = modelFactory;
         this.loanRepository = loanRepository;
     }
 
     @Override
     public void delete(int id) {
-        Optional<Loan> optionalLoan = Optional.ofNullable(loanRepository.get(id));
-        if (optionalLoan.isEmpty()) {
+        Loan loan = loanRepository.get(id);
+        if (loan == null) {
             throw new ResourceNotFoundException("Loan " + id + " not found");
         }
-        loanRepository.delete(optionalLoan.get());
+        loanRepository.delete(loan);
     }
 
     @Override
     public void put(int id, String json) {
-        Optional<Loan> optionalLoan = Optional.ofNullable(loanRepository.get(id));
-        if (optionalLoan.isEmpty()) {
+        Loan loan = loanRepository.get(id);
+        if (loan == null) {
             throw new ResourceNotFoundException("Loan " + id + " not found");
         }
-
         try {
             // Deserialize JSON to Loan object
             var updatedLoan = Mappers.get().readValue(json, Loan.class);
-            Loan loan = optionalLoan.get();
 
             loan.setLoanDate(updatedLoan.getLoanDate());
             loan.setReturnDate(updatedLoan.getReturnDate());
             loan.setCustomer(updatedLoan.getCustomer());
 
-            loanRepository.save(loan); // Save the updated loan
+            loanRepository.save(loan);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to parse loan JSON", e);
         }
@@ -79,12 +69,12 @@ public class LoanController implements Controller {
 
     @Override
     public String get(int id) {
-        Optional<Loan> optionalLoan = Optional.ofNullable(loanRepository.get(id));
-        if (optionalLoan.isEmpty()) {
+        Loan loan = loanRepository.get(id);
+        if (loan == null) {
             throw new ResourceNotFoundException("Loan " + id + " not found");
         }
         try {
-            return mapper.writeValueAsString(optionalLoan.get());
+            return mapper.writeValueAsString(loan);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize loan to JSON", e);
         }

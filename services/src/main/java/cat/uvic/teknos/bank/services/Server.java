@@ -17,7 +17,7 @@ public class Server {
     }
 
     public void start() {
-        System.out.println("Starting server... " + PORT);
+        System.out.println("Server started " + PORT);
         try(var serverSocket = new ServerSocket(PORT)) {
 
             while (!SHUTDOWN_SERVER) {

@@ -4,42 +4,23 @@ POST http://localhost:8080/worker
 Content-Type: application/json
 
 {
-
   "firstName": "Silviu",
   "lastName": "Balint",
-  "transaction": [
-    {
-      "id": 12,
-      "transactionType": null,
-      "amount": 100,
-      "transactionDate": null,
-      "customer": null,
-      "worker": null
-    }
-  ],
+  "transaction": null,
   "account": null
 }
 
 
 ###
 # Update Worker
-PUT http://localhost:8080/worker/6
+PUT http://localhost:8080/worker/7
 Content-Type: application/json
 
 {
-  "id": 6,
+  "id": 7,
   "firstName": "Silviu",
-  "lastName": "Balint",
-  "transaction": [
-    {
-      "id": 10,
-      "transactionType": null,
-      "amount": 150,
-      "transactionDate": null,
-      "customer": null,
-      "worker": null
-    }
-  ],
+  "lastName": "Sebastian",
+  "transaction": null,
   "account": null
 }
 
@@ -55,4 +36,4 @@ Accept: application/json
 
 ###
 ## Delete Worker
-DELETE http://localhost:8080/worker/6
+DELETE http://localhost:8080/worker/7

@@ -4,7 +4,6 @@ POST http://localhost:8080/loan
 Content-Type: application/json
 
 {
-  "id": 0,
   "loanDate": 1718402400000,
   "returnDate": 1723672800000,
   "customer": {
@@ -21,14 +20,14 @@ Content-Type: application/json
 
 ###
 # Update Loan
-PUT http://localhost:8080/loan/2
+PUT http://localhost:8080/loan/3
 Content-Type: application/json
 
 {
   "loanDate": 1718402400000,
   "returnDate": 1723672800000,
   "customer": {
-    "id": 3,
+    "id": 4,
     "firstName": null,
     "lastName": null,
     "address": null,

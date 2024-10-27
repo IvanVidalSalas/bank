@@ -4,7 +4,6 @@ POST http://localhost:8080/account
 Content-Type: application/json
 
 {
-
   "accountType": "Checking",
   "balance": 4500,
   "customer": {
@@ -22,7 +21,7 @@ Content-Type: application/json
 
 ###
 # Update Account
-PUT http://localhost:8080/account/5
+PUT http://localhost:8080/account/6
 Content-Type: application/json
 
 {
@@ -54,4 +53,4 @@ Accept: application/json
 
 ###
 # Delete Account
-DELETE http://localhost:8080/account/3
+DELETE http://localhost:8080/account/5

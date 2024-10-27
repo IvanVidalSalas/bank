@@ -24,7 +24,7 @@ public class App {
         var workerRepository = repositoryFactory.getWorkerRepository();
         var transactionRepository = repositoryFactory.getTransactionRepository();
 
-        // Create controllers using the appropriate repositories
+        // Create controllers using the repositories
         var customerController = new CustomerController(customerRepository);
         var loanController = new LoanController(loanRepository);
         var accountController = new AccountController(accountRepository);
