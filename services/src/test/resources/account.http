@@ -25,7 +25,7 @@ PUT http://localhost:8080/account/6
 Content-Type: application/json
 
 {
-  "id": 5,
+  "id": 6,
   "accountType": "Checking",
   "balance": 7000,
   "customer": {
@@ -53,4 +53,4 @@ Accept: application/json
 
 ###
 # Delete Account
-DELETE http://localhost:8080/account/5
+DELETE http://localhost:8080/account/6
