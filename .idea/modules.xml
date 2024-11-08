@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clients/console/src/main/bank.clients.console.src.main.iml" filepath="$PROJECT_DIR$/.idea/modules/clients/console/src/main/bank.clients.console.src.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clients/console/src/main/test/bank.clients.console.src.main.test.iml" filepath="$PROJECT_DIR$/.idea/modules/clients/console/src/main/test/bank.clients.console.src.main.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain-implementations/jdbc/bank.domain-implementations.jdbc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/domain-implementations/jdbc/bank.domain-implementations.jdbc.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain-implementations/jdbc/bank.domain-implementations.jdbc.test.iml" filepath="$PROJECT_DIR$/.idea/modules/domain-implementations/jdbc/bank.domain-implementations.jdbc.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/services/bank.services.main.iml" filepath="$PROJECT_DIR$/.idea/modules/services/bank.services.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/services/bank.services.test.iml" filepath="$PROJECT_DIR$/.idea/modules/services/bank.services.test.iml" />
     </modules>
   </component>

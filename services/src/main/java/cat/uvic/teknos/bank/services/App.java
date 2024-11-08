@@ -1,15 +1,13 @@
 package cat.uvic.teknos.bank.services;
 
 import cat.uvic.teknos.bank.domain.jdbc.repositories.JdbcRepositoryFactory;
-import cat.uvic.teknos.bank.models.ModelFactory;
 import cat.uvic.teknos.bank.repositories.RepositoryFactory;
 import cat.uvic.teknos.bank.services.controllers.*;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
+
 
 public class App {
 
