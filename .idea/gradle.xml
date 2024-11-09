@@ -23,9 +23,6 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/clients" />
             <option value="$PROJECT_DIR$/clients/console" />
-            <option value="$PROJECT_DIR$/clients/console/src" />
-            <option value="$PROJECT_DIR$/clients/console/src/main" />
-            <option value="$PROJECT_DIR$/clients/console/src/main/test" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain-implementations" />
             <option value="$PROJECT_DIR$/domain-implementations/file" />
