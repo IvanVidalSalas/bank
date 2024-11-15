@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":cryptoutils"))
     implementation(project(":utilities"))
     implementation(project(":domain-implementations:jdbc"))
     implementation(project(":domain-implementations:jpa"))

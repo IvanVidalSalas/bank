@@ -58,8 +58,8 @@ public class App {
                     }
                 }
                 case "3" -> {
-                    var customer = new CustomerDto();
 
+                    var customer = new CustomerDto();
                     customer.setFirstName(readLine(in));
 
                     try {

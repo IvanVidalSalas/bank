@@ -11,5 +11,6 @@ plugins {
 }
 
 rootProject.name = "bank"
-include("app", "domain", "utilities",":domain-implementations:file",":domain-implementations:jdbc", ":domain-implementations:jpa", ":services", "clients:console")
+include("app", "domain", "utilities",":domain-implementations:file",":domain-implementations:jdbc", ":domain-implementations:jpa", ":services", "clients:console", "cryptoutils")
+
 
