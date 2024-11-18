@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RestClientImplementationTest {
     @Test
     void getTest() {
-        var restClient = new RestClientImplementation("localhost", 8888);
+        var restClient = new RestClientImplementation("localhost", 3007);
         try {
             Customer customer = restClient.get("customers/1", CustomerDto.class);
 
@@ -23,7 +23,7 @@ class RestClientImplementationTest {
 
     @Test
     void getAllTest() {
-        var restClient = new RestClientImplementation("localhost", 8888);
+        var restClient = new RestClientImplementation("localhost", 3007);
         try {
             Customer[] customers = restClient.getAll("customers", CustomerDto[].class);
 
@@ -35,7 +35,7 @@ class RestClientImplementationTest {
 
     @Test
     void postTest() {
-        var restClient = new RestClientImplementation("localhost", 8888);
+        var restClient = new RestClientImplementation("localhost", 3007);
         try {
             var customer = new CustomerDto();
             customer.setFirstName("Test");
@@ -46,5 +46,16 @@ class RestClientImplementationTest {
         } catch (RequestException | JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+    @Test
+    void putTest(){
+
+
+    }
+
+    @Test
+    void deleteTest(){
+
+
     }
 }

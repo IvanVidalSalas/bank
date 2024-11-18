@@ -32,6 +32,7 @@ public class BackOffice {
                 case "3" -> manageLoans();
                 case "4" -> manageTransactions();
                 case "5" -> manageWorkers();
+                default -> out.println("Invalid option. Please try again.");
             }
         }
         while (!command.equals("exit"));

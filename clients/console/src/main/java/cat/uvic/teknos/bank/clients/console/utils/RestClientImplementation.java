@@ -5,7 +5,10 @@ import cat.uvic.teknos.bank.clients.console.exceptions.RequestException;
 import rawhttp.core.*;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 
 public class RestClientImplementation implements RestClient {
@@ -44,7 +47,7 @@ public class RestClientImplementation implements RestClient {
     protected <T> T execRequest(String method, String path, String body, Class<T> returnType) throws RequestException {
         var rawHttp = new RawHttp();
         try (var socket = new Socket(host, port)) {
-           /* var request = new RawHttpRequest(
+            var request = new RawHttpRequest(
                     new RequestLine(
                             "GET",
                             new URI(String.format("http://%s:%d/%s", host, port, path)),
@@ -56,13 +59,13 @@ public class RestClientImplementation implements RestClient {
                             .build(),
                     null,
                     InetAddress.getByName(host)
-            );*/
+            );
 
             if (body == null) {
                 body = "";
             }
 
-            var request = rawHttp.parseRequest(
+            request = rawHttp.parseRequest(
                     method + " " + String.format("http://%s:%d/%s", host, port, path) + " HTTP/1.1\r\n" +
                             "Host: " + host + "\r\n" +
                             "User-Agent: RawHTTP\r\n" +
@@ -84,6 +87,8 @@ public class RestClientImplementation implements RestClient {
             return returnValue;
         } catch (IOException e) {
             throw new ConsoleClientException();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 }
