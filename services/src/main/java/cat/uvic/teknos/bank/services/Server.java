@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Server {
 
-    public final int PORT = 8080;
+    public final int PORT = 3007;
     private final RequestRouter requestRouter;
     private volatile boolean SHUTDOWN_SERVER = false;
 

@@ -11,5 +11,5 @@ public interface RestClient {
 
     void put(String path, String body) throws RequestException;
 
-    void delete(String path, String body) throws RequestException;
+    void delete(String path) throws RequestException;
 }
