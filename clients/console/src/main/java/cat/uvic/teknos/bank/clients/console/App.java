@@ -5,7 +5,6 @@ import cat.uvic.teknos.bank.clients.console.exceptions.RequestException;
 import cat.uvic.teknos.bank.clients.console.utils.Mappers;
 import cat.uvic.teknos.bank.clients.console.utils.RestClient;
 import cat.uvic.teknos.bank.clients.console.utils.RestClientImplementation;
-import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.Transaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -14,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class App {
@@ -31,15 +32,20 @@ public class App {
             showMainMenu();
             command = readLine(in);
 
+            if (command.equals("exit")) {
+                break;
+            }
+
             switch (command) {
                 case "1" -> manageCustomers();
                 case "2" -> manageAccounts();
                 case "3" -> manageLoans();
                 case "4" -> manageTransactions();
                 case "5" -> manageWorkers();
+                default -> out.println("\nWrite a correct option.\n");
             }
 
-        } while (!command.equals("exit"));
+        } while (true);
 
         out.println("\nSee you soon!");
     }
@@ -98,7 +104,8 @@ public class App {
                     customer.setEmail(readLine(in));
 
                     try {
-                        restClient.post("/customers", Mappers.get().writeValueAsString(customer));
+                        restClient.post("/customer", Mappers.get().writeValueAsString(customer));
+                        out.println("Customer created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -121,6 +128,7 @@ public class App {
                     customer.setEmail(readLine(in));
                     try {
                         restClient.put("/customer/" + customerId, Mappers.get().writeValueAsString(customer));
+                        out.println("Customer updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -130,6 +138,7 @@ public class App {
                     var customerId = readLine(in);
                     try {
                         restClient.delete("/customer/" + customerId);
+                        out.println("Customer deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }
@@ -151,7 +160,8 @@ public class App {
                     try {
                         var accounts = restClient.getAll("/account", AccountDto[].class);
                         for (AccountDto account : accounts) {
-                            out.println("Account ID: " + account.getId());
+                            out.println("\nAccount ID: " + account.getId());
+                            out.println("Customer ID: " + account.getCustomer().getId());
                             out.println("Account Type: " + account.getAccountType());
                             out.println("Balance: " + account.getBalance());
                         }
@@ -166,6 +176,7 @@ public class App {
                     try {
                         var account = restClient.get("/account/" + accountId, AccountDto.class);
                         out.println("Account ID: " + account.getId());
+                        out.println("Customer ID: " + account.getCustomer().getId());
                         out.println("Account Type: " + account.getAccountType());
                         out.println("Balance: " + account.getBalance());
                     } catch (RequestException e) {
@@ -176,6 +187,12 @@ public class App {
                 case "3" -> {
                     var account = new AccountDto();
 
+                    out.println("Enter Customer ID:");
+                    int customerId = Integer.parseInt(readLine(in));
+                    var customer = new CustomerDto();
+                    customer.setId(customerId);
+                    account.setCustomer(customer);
+
                     out.println("Enter account type:");
                     account.setAccountType(readLine(in));
 
@@ -183,7 +200,8 @@ public class App {
                     account.setBalance(Integer.parseInt(readLine(in)));
 
                     try {
-                        restClient.post("/accounts", Mappers.get().writeValueAsString(account));
+                        restClient.post("/account", Mappers.get().writeValueAsString(account));
+                        out.println("Account created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -194,6 +212,12 @@ public class App {
                     var accountId = readLine(in);
                     var account = restClient.get("/account/" + accountId, AccountDto.class);
 
+                    out.println("Enter Customer ID:");
+                    int customerId = Integer.parseInt(readLine(in));
+                    var customer = new CustomerDto();
+                    customer.setId(customerId);
+                    account.setCustomer(customer);
+
                     out.println("Enter account type:");
                     account.setAccountType(readLine(in));
 
@@ -202,6 +226,7 @@ public class App {
 
                     try {
                         restClient.put("/account/" + accountId, Mappers.get().writeValueAsString(account));
+                        out.println("Account updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -212,6 +237,7 @@ public class App {
                     var accountId = readLine(in);
                     try {
                         restClient.delete("/account/" + accountId);
+                        out.println("Account deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }
@@ -234,11 +260,9 @@ public class App {
                     try {
                         var loans = restClient.getAll("/loan", LoanDto[].class);
                         for (LoanDto loan : loans) {
-                            out.println("Loan ID: " + loan.getId());
+                            out.println("\nLoan ID: " + loan.getCustomer().getId());
                             out.println("Loan Date: " + loan.getLoanDate());
                             out.println("Return Date: " + loan.getReturnDate());
-                            out.println("Customer ID: " + loan.getCustomer().getId());
-                            out.println("Customer Name: " + loan.getCustomer().getFirstName() + " " + loan.getCustomer().getLastName());
                         }
                     } catch (RequestException e) {
                         out.println(e.getMessage());
@@ -246,7 +270,7 @@ public class App {
                 }
 
                 case "2" -> { // Get loan by ID
-                    out.println("Enter Loan ID:");
+                    out.println("Enter Loan ID (Customer ID):");
                     var loanId = Integer.parseInt(readLine(in));
                     try {
                         var loan = restClient.get("/loan/" + loanId, LoanDto.class);
@@ -259,19 +283,15 @@ public class App {
                     }
                 }
 
-                case "3" -> { // Create a new loan
+                case "3" -> {
+                    // Create a new loan
                     var loan = new LoanDto();
 
-                    out.println("Enter Customer ID for this loan:");
-                    var customerId = Integer.parseInt(readLine(in));
-                    try {
-                        // Fetch the customer to associate with the loan
-                        var customer = restClient.get("/customer/" + customerId, CustomerDto.class);
-                        loan.setCustomer(customer);
-                    } catch (RequestException e) {
-                        out.println("Customer not found: " + e.getMessage());
-                        break;
-                    }
+                    out.println("Enter Loan ID (Customer ID) for the new loan:");
+                    int customerId = Integer.parseInt(readLine(in));
+                    var customer = new CustomerDto();
+                    customer.setId(customerId);
+                    loan.setCustomer(customer);
 
                     out.println("Enter Loan Date (YYYY-MM-DD):");
                     loan.setLoanDate(Date.valueOf(readLine(in)));
@@ -281,22 +301,17 @@ public class App {
 
                     try {
                         restClient.post("/loan", Mappers.get().writeValueAsString(loan));
-                        out.println("Loan created successfully!");
+                        out.println("Loan created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
                 }
 
                 case "4" -> { // Update an existing loan
-                    out.println("Enter Loan ID to update:");
-                    var loanId = Integer.parseInt(readLine(in));
-                    LoanDto loan;
-                    try {
-                        loan = restClient.get("/loan/" + loanId, LoanDto.class);
-                    } catch (RequestException e) {
-                        out.println("Loan not found: " + e.getMessage());
-                        break;
-                    }
+
+                    out.println("Enter Loan ID (Customer ID) to update:");
+                    var loanId = readLine(in);
+                    var loan = restClient.get("/loan/" + loanId, LoanDto.class);
 
                     out.println("Enter new Loan Date (YYYY-MM-DD):");
                     loan.setLoanDate(Date.valueOf(readLine(in)));
@@ -306,18 +321,18 @@ public class App {
 
                     try {
                         restClient.put("/loan/" + loanId, Mappers.get().writeValueAsString(loan));
-                        out.println("Loan updated successfully!");
+                        out.println("Loan updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
                 }
 
                 case "5" -> { // Delete loan
-                    out.println("Enter Loan ID to delete:");
+                    out.println("Enter Loan ID (Customer ID) to delete:");
                     var loanId = Integer.parseInt(readLine(in));
                     try {
                         restClient.delete("/loan/" + loanId);
-                        out.println("Loan deleted successfully!");
+                        out.println("Loan deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }
@@ -340,12 +355,11 @@ public class App {
                     try {
                         var transactions = restClient.getAll("/transaction", TransactionDto[].class);
                         for (TransactionDto transaction : transactions) {
-                            out.println("Transaction ID: " + transaction.getId());
+                            out.println("\nTransaction ID: " + transaction.getId());
+                            out.println("Customer ID: " + (transaction.getCustomer().getId()));
                             out.println("Transaction Type: " + transaction.getTransactionType());
                             out.println("Amount: " + transaction.getAmount());
                             out.println("Date: " + transaction.getTransactionDate());
-                            out.println("Customer ID: " + (transaction.getCustomer().getId()));
-
                         }
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
@@ -358,10 +372,10 @@ public class App {
                     try {
                         var transaction = restClient.get("/transaction/" + transactionId, TransactionDto.class);
                         out.println("Transaction ID: " + transaction.getId());
+                        out.println("Customer ID: " + (transaction.getCustomer().getId()));
                         out.println("Transaction Type: " + transaction.getTransactionType());
                         out.println("Amount: " + transaction.getAmount());
                         out.println("Date: " + transaction.getTransactionDate());
-                        out.println("Customer ID: " + (transaction.getCustomer().getId()));
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -370,6 +384,12 @@ public class App {
                 case "3" -> {
 
                     var transaction = new TransactionDto();
+
+                    out.println("Enter Customer ID:");
+                    int customerId = Integer.parseInt(readLine(in));
+                    var customer = new CustomerDto();
+                    customer.setId(customerId);
+                    transaction.setCustomer(customer);
 
                     out.println("Enter transaction type:");
                     transaction.setTransactionType(readLine(in));
@@ -380,12 +400,9 @@ public class App {
                     out.println("Enter transaction date (yyyy-mm-dd):");
                     transaction.setTransactionDate(Date.valueOf(readLine(in)));
 
-                    /*out.println("Enter Customer ID:");
-                    var customerId = readLine(in);
-                    transaction.setCustomer(customerId);*/
-
                     try {
                         restClient.post("/transaction", Mappers.get().writeValueAsString(transaction));
+                        out.println("Transaction created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -396,6 +413,12 @@ public class App {
                     out.println("Enter Transaction ID to update:");
                     var transactionId = readLine(in);
                     var transaction = restClient.get("/transaction/" + transactionId, TransactionDto.class);
+
+                    out.println("Enter Customer ID:");
+                    int customerId = Integer.parseInt(readLine(in));
+                    var customer = new CustomerDto();
+                    customer.setId(customerId);
+                    transaction.setCustomer(customer);
 
                     out.println("Enter transaction type:");
                     transaction.setTransactionType(readLine(in));
@@ -408,6 +431,7 @@ public class App {
 
                     try {
                         restClient.put("/transaction/" + transactionId, Mappers.get().writeValueAsString(transaction));
+                        out.println("Transaction updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -418,6 +442,7 @@ public class App {
                     var transactionId = readLine(in);
                     try {
                         restClient.delete("/transaction/" + transactionId);
+                        out.println("Transaction deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }
@@ -440,18 +465,14 @@ public class App {
                     try {
                         var workers = restClient.getAll("/worker", WorkerDto[].class);
                         for (WorkerDto worker : workers) {
-                            out.println("Worker ID: " + worker.getId());
-                            out.println("First Name: " + worker.getFirstName());
-                            out.println("Last Name: " + worker.getLastName());
-                            out.println("Transactions:");
+                            out.println("\nWorker ID: " + worker.getId());
                             if (worker.getTransaction() != null) {
                                 for (Transaction transaction : worker.getTransaction()) {
                                     out.println("Transaction ID: " + transaction.getId());
-                                    out.println("Type: " + transaction.getTransactionType());
-                                    out.println("Amount: " + transaction.getAmount());
-                                    out.println("Date: " + transaction.getTransactionDate());
                                 }
                             }
+                            out.println("First Name: " + worker.getFirstName());
+                            out.println("Last Name: " + worker.getLastName());
                         }
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
@@ -459,23 +480,19 @@ public class App {
                 }
 
                 case "2" -> {
-
                     out.println("Enter Worker ID:");
                     var workerId = readLine(in);
                     try {
                         var worker = restClient.get("/worker/" + workerId, WorkerDto.class);
                         out.println("Worker ID: " + worker.getId());
-                        out.println("First Name: " + worker.getFirstName());
-                        out.println("Last Name: " + worker.getLastName());
-                        out.println("Transactions:");
                         if (worker.getTransaction() != null) {
                             for (Transaction transaction : worker.getTransaction()) {
                                 out.println("Transaction ID: " + transaction.getId());
-                                out.println("Type: " + transaction.getTransactionType());
-                                out.println("Amount: " + transaction.getAmount());
-                                out.println("Date: " + transaction.getTransactionDate());
                             }
                         }
+                        out.println("First Name: " + worker.getFirstName());
+                        out.println("Last Name: " + worker.getLastName());
+
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -484,14 +501,24 @@ public class App {
                 case "3" -> {
                     var worker = new WorkerDto();
 
+                    /*out.println("Enter Transaction ID:");
+                    int transactionId = Integer.parseInt(readLine(in));
+                    var transaction = new TransactionDto();
+                    transaction.setId(transactionId);
+
+                    // Create a Set and add the transaction to it
+                    Set<Transaction> transactions = new HashSet<>();
+                    transactions.add(transaction);
+                    worker.setTransaction(transactions);*/
+
                     out.println("Enter first name:");
                     worker.setFirstName(readLine(in));
 
                     out.println("Enter last name:");
                     worker.setLastName(readLine(in));
-
                     try {
                         restClient.post("/worker", Mappers.get().writeValueAsString(worker));
+                        out.println("Worker created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -503,6 +530,12 @@ public class App {
                     var workerId = readLine(in);
                     var worker = restClient.get("/worker/" + workerId, WorkerDto.class);
 
+                    /*out.println("Enter Transaction ID:");
+                    int transactionId = Integer.parseInt(readLine(in));
+                    var transaction = new TransactionDto();
+                    transaction.setId(transactionId);
+                    worker.setTransaction(Set.of(transaction));*/
+
                     out.println("Enter first name:");
                     worker.setFirstName(readLine(in));
 
@@ -510,7 +543,8 @@ public class App {
                     worker.setLastName(readLine(in));
 
                     try {
-                        restClient.put("/workers/" + workerId, Mappers.get().writeValueAsString(worker));
+                        restClient.put("/worker/" + workerId, Mappers.get().writeValueAsString(worker));
+                        out.println("Worker updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -521,6 +555,7 @@ public class App {
                     var workerId = readLine(in);
                     try {
                         restClient.delete("/worker/" + workerId);
+                        out.println("Worker deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }

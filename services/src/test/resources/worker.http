@@ -1,6 +1,6 @@
 ###
 # Create New Worker
-POST http://localhost:8080/worker
+POST http://localhost:3007/worker
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 
 ###
 # Update Worker
-PUT http://localhost:8080/worker/7
+PUT http://localhost:3007/worker/7
 Content-Type: application/json
 
 {
@@ -26,14 +26,14 @@ Content-Type: application/json
 
 ###
 # Get Worker
-GET http://localhost:8080/worker/5
+GET http://localhost:3007/worker/5
 Accept: application/json
 
 ###
 # Get All Workers
-GET http://localhost:8080/worker
+GET http://localhost:3007/worker
 Accept: application/json
 
 ###
 ## Delete Worker
-DELETE http://localhost:8080/worker/7
+DELETE http://localhost:3007/worker/7
