@@ -48,7 +48,7 @@ Accept: application/json
 
 ###
 # Get All Accounts
-GET http://localhost:8080/account
+GET http://localhost:3007/account
 Accept: application/json
 
 ###

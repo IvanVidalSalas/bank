@@ -12,17 +12,16 @@ import java.util.Map;
 public class App {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        // Create the repository factory directly
+
         RepositoryFactory repositoryFactory = new JdbcRepositoryFactory();
 
-        // Get repositories
+
         var customerRepository = repositoryFactory.getCustomerRepository();
         var loanRepository = repositoryFactory.getLoanRepository();
         var accountRepository = repositoryFactory.getAccountRepository();
         var workerRepository = repositoryFactory.getWorkerRepository();
         var transactionRepository = repositoryFactory.getTransactionRepository();
 
-        // Create controllers using the repositories
         var customerController = new CustomerController(customerRepository);
         var loanController = new LoanController(loanRepository);
         var accountController = new AccountController(accountRepository);
@@ -37,7 +36,6 @@ public class App {
         controllers.put("worker", workerController);
         controllers.put("transaction", transactionController);
 
-        // Set up the request router and start the server
         var requestRouter = new RequestRouterImplementation(controllers);
         new Server(requestRouter).start();
     }

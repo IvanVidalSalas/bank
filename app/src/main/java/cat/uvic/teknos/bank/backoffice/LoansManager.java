@@ -85,7 +85,6 @@ public class LoansManager {
         int customerId = Integer.parseInt(readLine(in));
         Customer customer = modelFactory.createCustomer();
         customer.setId(customerId);
-
         loan.setCustomer(customer);
 
         out.println("Update loan date:");

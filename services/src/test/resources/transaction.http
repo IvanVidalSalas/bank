@@ -1,6 +1,6 @@
 ###
 # Create New Transaction
-POST http://localhost:8080/transaction
+POST http://localhost:3007/transaction
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 
 ###
 # Update Transaction
-PUT http://localhost:8080/transaction/11
+PUT http://localhost:3007/transaction/11
 Content-Type: application/json
 
 {
@@ -45,14 +45,14 @@ Content-Type: application/json
 
 ###
 # Get Transaction
-GET http://localhost:8080/transaction/10
+GET http://localhost:3007/transaction/10
 Accept: application/json
 
 ###
 # Get All Transactions
-GET http://localhost:8080/transaction
+GET http://localhost:3007/transaction
 Accept: application/json
 
 ###
 # Delete Transaction
-DELETE http://localhost:8080/transaction/11
+DELETE http://localhost:3007/transaction/11

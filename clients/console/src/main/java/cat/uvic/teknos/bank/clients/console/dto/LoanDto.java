@@ -39,9 +39,7 @@ public class LoanDto implements Loan{
     }
 
     @Override
-    public Customer getCustomer() {
-        return customer;
-    }
+    public Customer getCustomer() { return customer; }
     @Override
     public void setCustomer(Customer customer) { this.customer = customer; }
 

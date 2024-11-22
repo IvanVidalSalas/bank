@@ -44,6 +44,8 @@ public class CustomerController implements Controller {
             customer.setLastName(updatedCustomer.getLastName());
             customer.setAddress(updatedCustomer.getAddress());
             customer.setEmail(updatedCustomer.getEmail());
+            customer.setAccount(updatedCustomer.getAccount());
+            customer.setTransaction(updatedCustomer.getTransaction());
 
             customerRepository.save(customer);
         } catch (JsonProcessingException e) {

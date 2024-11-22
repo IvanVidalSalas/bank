@@ -45,7 +45,7 @@ Accept: application/json
 
 ###
 # Get All Loans
-GET http://localhost:8080/loan
+GET http://localhost:3007/loan
 Accept: application/json
 
 ###

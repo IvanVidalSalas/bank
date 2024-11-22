@@ -1,6 +1,7 @@
 package cat.uvic.teknos.bank.clients.console;
 
 import cat.uvic.teknos.bank.clients.console.dto.*;
+import cat.uvic.teknos.bank.clients.console.exceptions.ConsoleClientException;
 import cat.uvic.teknos.bank.clients.console.exceptions.RequestException;
 import cat.uvic.teknos.bank.clients.console.utils.Mappers;
 import cat.uvic.teknos.bank.clients.console.utils.RestClient;
@@ -13,8 +14,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class App {
@@ -265,7 +264,7 @@ public class App {
                             out.println("Return Date: " + loan.getReturnDate());
                         }
                     } catch (RequestException e) {
-                        out.println(e.getMessage());
+                        throw new ConsoleClientException(e);
                     }
                 }
 
@@ -310,7 +309,7 @@ public class App {
                 case "4" -> { // Update an existing loan
 
                     out.println("Enter Loan ID (Customer ID) to update:");
-                    var loanId = readLine(in);
+                    var loanId = Integer.parseInt(readLine(in));
                     var loan = restClient.get("/loan/" + loanId, LoanDto.class);
 
                     out.println("Enter new Loan Date (YYYY-MM-DD):");
@@ -397,7 +396,7 @@ public class App {
                     out.println("Enter amount:");
                     transaction.setAmount(Integer.parseInt(readLine(in)));
 
-                    out.println("Enter transaction date (yyyy-mm-dd):");
+                    out.println("Enter transaction date (YYYY-MM-DD):");
                     transaction.setTransactionDate(Date.valueOf(readLine(in)));
 
                     try {
@@ -426,7 +425,7 @@ public class App {
                     out.println("Enter amount:");
                     transaction.setAmount(Integer.parseInt(readLine(in)));
 
-                    out.println("Enter transaction date (yyyy-mm-dd):");
+                    out.println("Enter transaction date (YYYY-MM-DD):");
                     transaction.setTransactionDate(Date.valueOf(readLine(in)));
 
                     try {
