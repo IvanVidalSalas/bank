@@ -1,6 +1,6 @@
 ###
 # Create New Account
-POST http://localhost:8080/account
+POST http://localhost:3007/account
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ###
 # Update Account
-PUT http://localhost:8080/account/6
+PUT http://localhost:3007/account/6
 Content-Type: application/json
 
 {
@@ -43,7 +43,7 @@ Content-Type: application/json
 
 ###
 # Get Account
-GET http://localhost:8080/account/4
+GET http://localhost:3007/account/4
 Accept: application/json
 
 ###
@@ -53,4 +53,4 @@ Accept: application/json
 
 ###
 # Delete Account
-DELETE http://localhost:8080/account/6
+DELETE http://localhost:3007/account/6

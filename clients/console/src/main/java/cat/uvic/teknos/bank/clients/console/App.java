@@ -6,6 +6,7 @@ import cat.uvic.teknos.bank.clients.console.exceptions.RequestException;
 import cat.uvic.teknos.bank.clients.console.utils.Mappers;
 import cat.uvic.teknos.bank.clients.console.utils.RestClient;
 import cat.uvic.teknos.bank.clients.console.utils.RestClientImplementation;
+import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.Transaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.sql.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class App {
@@ -64,8 +66,8 @@ public class App {
                             out.println("\nCustomer ID: " + customer.getId());
                             out.println("Name: " + customer.getFirstName());
                             out.println("Last Name: " + customer.getLastName());
-                            out.println("Email: " + customer.getEmail());
                             out.println("Address: " + customer.getAddress());
+                            out.println("Email: " + customer.getEmail());
                         }
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
@@ -80,8 +82,9 @@ public class App {
                         out.println("Customer ID: " + customer.getId());
                         out.println("Name: " + customer.getFirstName());
                         out.println("Last Name: " + customer.getLastName());
-                        out.println("Email: " + customer.getEmail());
                         out.println("Address: " + customer.getAddress());
+                        out.println("Email: " + customer.getEmail());
+
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -104,7 +107,7 @@ public class App {
 
                     try {
                         restClient.post("/customer", Mappers.get().writeValueAsString(customer));
-                        out.println("Customer created!");
+                        out.println("\nCustomer created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -127,7 +130,7 @@ public class App {
                     customer.setEmail(readLine(in));
                     try {
                         restClient.put("/customer/" + customerId, Mappers.get().writeValueAsString(customer));
-                        out.println("Customer updated!");
+                        out.println("\nCustomer updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -137,7 +140,7 @@ public class App {
                     var customerId = readLine(in);
                     try {
                         restClient.delete("/customer/" + customerId);
-                        out.println("Customer deleted!");
+                        out.println("\nCustomer deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }
@@ -200,7 +203,7 @@ public class App {
 
                     try {
                         restClient.post("/account", Mappers.get().writeValueAsString(account));
-                        out.println("Account created!");
+                        out.println("\nAccount created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -225,7 +228,7 @@ public class App {
 
                     try {
                         restClient.put("/account/" + accountId, Mappers.get().writeValueAsString(account));
-                        out.println("Account updated!");
+                        out.println("\nAccount updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -236,7 +239,7 @@ public class App {
                     var accountId = readLine(in);
                     try {
                         restClient.delete("/account/" + accountId);
-                        out.println("Account deleted!");
+                        out.println("\nAccount deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }
@@ -300,7 +303,7 @@ public class App {
 
                     try {
                         restClient.post("/loan", Mappers.get().writeValueAsString(loan));
-                        out.println("Loan created!");
+                        out.println("\nLoan created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -320,7 +323,7 @@ public class App {
 
                     try {
                         restClient.put("/loan/" + loanId, Mappers.get().writeValueAsString(loan));
-                        out.println("Loan updated!");
+                        out.println("\nLoan updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -331,7 +334,7 @@ public class App {
                     var loanId = Integer.parseInt(readLine(in));
                     try {
                         restClient.delete("/loan/" + loanId);
-                        out.println("Loan deleted!");
+                        out.println("\nLoan deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }
@@ -401,7 +404,7 @@ public class App {
 
                     try {
                         restClient.post("/transaction", Mappers.get().writeValueAsString(transaction));
-                        out.println("Transaction created!");
+                        out.println("\nTransaction created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -430,7 +433,7 @@ public class App {
 
                     try {
                         restClient.put("/transaction/" + transactionId, Mappers.get().writeValueAsString(transaction));
-                        out.println("Transaction updated!");
+                        out.println("\nTransaction updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -441,7 +444,7 @@ public class App {
                     var transactionId = readLine(in);
                     try {
                         restClient.delete("/transaction/" + transactionId);
-                        out.println("Transaction deleted!");
+                        out.println("\nTransaction deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }
@@ -517,7 +520,7 @@ public class App {
                     worker.setLastName(readLine(in));
                     try {
                         restClient.post("/worker", Mappers.get().writeValueAsString(worker));
-                        out.println("Worker created!");
+                        out.println("\nWorker created!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -543,7 +546,7 @@ public class App {
 
                     try {
                         restClient.put("/worker/" + workerId, Mappers.get().writeValueAsString(worker));
-                        out.println("Worker updated!");
+                        out.println("\nWorker updated!");
                     } catch (RequestException | JsonProcessingException e) {
                         out.println(e.getMessage());
                     }
@@ -554,7 +557,7 @@ public class App {
                     var workerId = readLine(in);
                     try {
                         restClient.delete("/worker/" + workerId);
-                        out.println("Worker deleted!");
+                        out.println("\nWorker deleted!");
                     } catch (RequestException e) {
                         out.println(e.getMessage());
                     }

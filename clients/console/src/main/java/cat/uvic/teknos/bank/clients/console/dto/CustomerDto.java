@@ -7,7 +7,6 @@ import cat.uvic.teknos.bank.models.Transaction;
 
 import java.util.Set;
 
-
 public class CustomerDto implements Customer {
     private int id;
     private String firstName;

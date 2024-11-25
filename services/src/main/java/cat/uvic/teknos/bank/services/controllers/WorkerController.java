@@ -42,8 +42,6 @@ public class WorkerController implements Controller {
 
             worker.setFirstName(updatedWorker.getFirstName());
             worker.setLastName(updatedWorker.getLastName());
-            worker.setTransaction(updatedWorker.getTransaction());
-            worker.setAccount(updatedWorker.getAccount());
 
             workerRepository.save(worker);
         } catch (JsonProcessingException e) {

@@ -1,6 +1,6 @@
 ###
 # Create New loan
-POST http://localhost:8080/loan
+POST http://localhost:3007/loan
 Content-Type: application/json
 
 {
@@ -20,14 +20,14 @@ Content-Type: application/json
 
 ###
 # Update Loan
-PUT http://localhost:8080/loan/3
+PUT http://localhost:3007/loan/2
 Content-Type: application/json
 
 {
   "loanDate": 1718402400000,
   "returnDate": 1723672800000,
   "customer": {
-    "id": 4,
+    "id": 2,
     "firstName": null,
     "lastName": null,
     "address": null,
@@ -40,7 +40,7 @@ Content-Type: application/json
 
 ###
 # Get Loan
-GET http://localhost:8080/loan/1
+GET http://localhost:3007/loan/1
 Accept: application/json
 
 ###
@@ -50,4 +50,4 @@ Accept: application/json
 
 ###
 # Delete Loan
-DELETE http://localhost:8080/loan/3
+DELETE http://localhost:3007/loan/3

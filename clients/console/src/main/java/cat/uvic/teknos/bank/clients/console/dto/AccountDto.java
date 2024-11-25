@@ -1,4 +1,5 @@
 package cat.uvic.teknos.bank.clients.console.dto;
+
 import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.Worker;
 

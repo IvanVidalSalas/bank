@@ -2,7 +2,7 @@
 USE BANK;
 
 INSERT INTO CUSTOMER (CUSTOMER_ID, FIRST_NAME, LAST_NAME, ADDRESS, EMAIL) VALUES
-    (1, 'Carla', 'Piñeyro', 'Carrer Llobregat', 'carlapiñeyro@gmail.com'),
+    (1, 'Carla', 'Lopez', 'Carrer Llobregat', 'carlalopez@gmail.com'),
     (2, 'Ariel', 'Espiro', 'Carrer Girona', 'arielespiro@gmail.com'),
     (3, 'Joel', 'Margenet', 'Carrer Taradell', 'joelmargenet@gmail.com'),
     (4, 'Pau', 'Font', 'Carrer Major', 'paufont@gmail.com');
@@ -19,7 +19,7 @@ INSERT INTO TRANSACTION (TRANSACTION_ID, CUSTOMER_ID, TRANSACTION_TYPE, AMOUNT, 
 
 
 INSERT INTO WORKER (WORKER_ID, TRANSACTION_ID, FIRST_NAME, LAST_NAME) VALUES
-    (5, 9, 'Jaume', 'Suñe'),
+    (5, 9, 'Jaume', 'Vidal'),
     (6, 10, 'Marisol', 'Aibar');
 
 
