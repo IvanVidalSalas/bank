@@ -6,16 +6,18 @@ import cat.uvic.teknos.bank.clients.console.exceptions.RequestException;
 import cat.uvic.teknos.bank.clients.console.utils.Mappers;
 import cat.uvic.teknos.bank.clients.console.utils.RestClient;
 import cat.uvic.teknos.bank.clients.console.utils.RestClientImplementation;
-import cat.uvic.teknos.bank.models.Customer;
 import cat.uvic.teknos.bank.models.Transaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciithemes.a7.A7_Grids;
+import de.vandermeer.skb.interfaces.document.TableRowStyle;
+import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.sql.Date;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class App {
@@ -62,13 +64,22 @@ public class App {
                 case "1" -> {
                     try {
                         var customers = restClient.getAll("/customer", CustomerDto[].class);
+
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Id", "First name", "Last name", "Address", "Email");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
                         for (CustomerDto customer : customers) {
-                            out.println("\nCustomer ID: " + customer.getId());
-                            out.println("Name: " + customer.getFirstName());
-                            out.println("Last Name: " + customer.getLastName());
-                            out.println("Address: " + customer.getAddress());
-                            out.println("Email: " + customer.getEmail());
+                            asciiTable.addRow(customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getAddress(), customer.getEmail());
+                            asciiTable.addRule();
                         }
+
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
+
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -77,18 +88,37 @@ public class App {
                 case "2" -> {
                     out.println("Enter Customer ID:");
                     var customerId = readLine(in);
+
                     try {
                         var customer = restClient.get("/customer/" + customerId, CustomerDto.class);
-                        out.println("Customer ID: " + customer.getId());
-                        out.println("Name: " + customer.getFirstName());
-                        out.println("Last Name: " + customer.getLastName());
-                        out.println("Address: " + customer.getAddress());
-                        out.println("Email: " + customer.getEmail());
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Customer ID", "First Name", "Last Name", "Address", "Email");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Add the customer data to the table
+                        asciiTable.addRow(
+                                customer.getId(),
+                                customer.getFirstName(),
+                                customer.getLastName(),
+                                customer.getAddress(),
+                                customer.getEmail()
+                        );
+                        asciiTable.addRule();
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
 
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
                 }
+
                 case "3" -> {
 
                     var customer = new CustomerDto();
@@ -161,12 +191,30 @@ public class App {
                 case "1" -> {
                     try {
                         var accounts = restClient.getAll("/account", AccountDto[].class);
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Account ID", "Customer ID", "Account Type", "Balance");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Add account data to the table
                         for (AccountDto account : accounts) {
-                            out.println("\nAccount ID: " + account.getId());
-                            out.println("Customer ID: " + account.getCustomer().getId());
-                            out.println("Account Type: " + account.getAccountType());
-                            out.println("Balance: " + account.getBalance());
+                            asciiTable.addRow(
+                                    account.getId(),
+                                    account.getCustomer().getId(),
+                                    account.getAccountType(),
+                                    account.getBalance()
+                            );
+                            asciiTable.addRule();
                         }
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
+
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -175,12 +223,31 @@ public class App {
                 case "2" -> {
                     out.println("Enter Account ID:");
                     var accountId = readLine(in);
+
                     try {
                         var account = restClient.get("/account/" + accountId, AccountDto.class);
-                        out.println("Account ID: " + account.getId());
-                        out.println("Customer ID: " + account.getCustomer().getId());
-                        out.println("Account Type: " + account.getAccountType());
-                        out.println("Balance: " + account.getBalance());
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Account ID", "Customer ID", "Account Type", "Balance");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Add the account data to the table
+                        asciiTable.addRow(
+                                account.getId(),
+                                account.getCustomer().getId(),
+                                account.getAccountType(),
+                                account.getBalance()
+                        );
+                        asciiTable.addRule();
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
+
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -261,11 +328,30 @@ public class App {
                 case "1" -> {
                     try {
                         var loans = restClient.getAll("/loan", LoanDto[].class);
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Loan ID", "Customer ID", "Loan Date", "Return Date");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Add loan data to the table
                         for (LoanDto loan : loans) {
-                            out.println("\nLoan ID: " + loan.getCustomer().getId());
-                            out.println("Loan Date: " + loan.getLoanDate());
-                            out.println("Return Date: " + loan.getReturnDate());
+                            asciiTable.addRow(
+                                    loan.getId(),  // Assuming LoanDto has an `getId()` method for Loan ID
+                                    loan.getCustomer().getId(),
+                                    loan.getLoanDate(),
+                                    loan.getReturnDate()
+                            );
+                            asciiTable.addRule();
                         }
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
+
                     } catch (RequestException e) {
                         throw new ConsoleClientException(e);
                     }
@@ -274,11 +360,29 @@ public class App {
                 case "2" -> { // Get loan by ID
                     out.println("Enter Loan ID (Customer ID):");
                     var loanId = Integer.parseInt(readLine(in));
+
                     try {
                         var loan = restClient.get("/loan/" + loanId, LoanDto.class);
-                        out.println("Loan ID: " + loan.getCustomer().getId());
-                        out.println("Loan Date: " + loan.getLoanDate());
-                        out.println("Return Date: " + loan.getReturnDate());
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Loan ID (Customer ID)", "Loan Date", "Return Date");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Add the loan data to the table
+                        asciiTable.addRow(
+                                loan.getCustomer().getId(),
+                                loan.getLoanDate(),
+                                loan.getReturnDate()
+                        );
+                        asciiTable.addRule();
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
 
                     } catch (RequestException e) {
                         out.println(e.getMessage());
@@ -356,13 +460,31 @@ public class App {
                 case "1" -> {
                     try {
                         var transactions = restClient.getAll("/transaction", TransactionDto[].class);
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Transaction ID", "Customer ID", "Transaction Type", "Amount", "Date");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Add transaction data to the table
                         for (TransactionDto transaction : transactions) {
-                            out.println("\nTransaction ID: " + transaction.getId());
-                            out.println("Customer ID: " + (transaction.getCustomer().getId()));
-                            out.println("Transaction Type: " + transaction.getTransactionType());
-                            out.println("Amount: " + transaction.getAmount());
-                            out.println("Date: " + transaction.getTransactionDate());
+                            asciiTable.addRow(
+                                    transaction.getId(),
+                                    transaction.getCustomer().getId(),
+                                    transaction.getTransactionType(),
+                                    transaction.getAmount(),
+                                    transaction.getTransactionDate()
+                            );
+                            asciiTable.addRule();
                         }
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
+
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -371,13 +493,32 @@ public class App {
                 case "2" -> {
                     out.println("Enter Transaction ID:");
                     var transactionId = readLine(in);
+
                     try {
                         var transaction = restClient.get("/transaction/" + transactionId, TransactionDto.class);
-                        out.println("Transaction ID: " + transaction.getId());
-                        out.println("Customer ID: " + (transaction.getCustomer().getId()));
-                        out.println("Transaction Type: " + transaction.getTransactionType());
-                        out.println("Amount: " + transaction.getAmount());
-                        out.println("Date: " + transaction.getTransactionDate());
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Transaction ID", "Customer ID", "Transaction Type", "Amount", "Date");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Add the transaction data to the table
+                        asciiTable.addRow(
+                                transaction.getId(),
+                                transaction.getCustomer().getId(),
+                                transaction.getTransactionType(),
+                                transaction.getAmount(),
+                                transaction.getTransactionDate()
+                        );
+                        asciiTable.addRule();
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
+
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -466,16 +607,39 @@ public class App {
                 case "1" -> {
                     try {
                         var workers = restClient.getAll("/worker", WorkerDto[].class);
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Worker ID", "Transaction IDs", "First Name", "Last Name");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Add worker data to the table
                         for (WorkerDto worker : workers) {
-                            out.println("\nWorker ID: " + worker.getId());
-                            if (worker.getTransaction() != null) {
-                                for (Transaction transaction : worker.getTransaction()) {
-                                    out.println("Transaction ID: " + transaction.getId());
-                                }
-                            }
-                            out.println("First Name: " + worker.getFirstName());
-                            out.println("Last Name: " + worker.getLastName());
+                            // Gather transaction IDs as a single comma-separated string
+                            String transactionIds = worker.getTransaction() != null
+                                    ? worker.getTransaction().stream()
+                                    .map(Transaction::getId)
+                                    .map(String::valueOf)
+                                    .collect(Collectors.joining(", "))
+                                    : "None";
+
+                            // Add a row for the worker
+                            asciiTable.addRow(
+                                    worker.getId(),
+                                    transactionIds,
+                                    worker.getFirstName(),
+                                    worker.getLastName()
+                            );
+                            asciiTable.addRule();
                         }
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
+
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
                     }
@@ -484,16 +648,38 @@ public class App {
                 case "2" -> {
                     out.println("Enter Worker ID:");
                     var workerId = readLine(in);
+
                     try {
                         var worker = restClient.get("/worker/" + workerId, WorkerDto.class);
-                        out.println("Worker ID: " + worker.getId());
-                        if (worker.getTransaction() != null) {
-                            for (Transaction transaction : worker.getTransaction()) {
-                                out.println("Transaction ID: " + transaction.getId());
-                            }
-                        }
-                        out.println("First Name: " + worker.getFirstName());
-                        out.println("Last Name: " + worker.getLastName());
+
+                        // Initialize AsciiTable and configure it
+                        var asciiTable = new AsciiTable();
+                        asciiTable.addRule();
+                        asciiTable.addRow("Worker ID", "First Name", "Last Name", "Transaction IDs");
+                        asciiTable.addRule(TableRowStyle.STRONG);
+
+                        // Prepare transaction IDs as a comma-separated string
+                        String transactionIds = worker.getTransaction() != null
+                                ? worker.getTransaction().stream()
+                                .map(Transaction::getId)
+                                .map(Object::toString)
+                                .collect(Collectors.joining(", "))
+                                : "None";
+
+                        // Add the worker's data to the table
+                        asciiTable.addRow(
+                                worker.getId(),
+                                worker.getFirstName(),
+                                worker.getLastName(),
+                                transactionIds
+                        );
+                        asciiTable.addRule();
+
+                        // Set table styling and render
+                        asciiTable.setTextAlignment(TextAlignment.CENTER);
+                        asciiTable.getContext().setGrid(A7_Grids.minusBarPlusEquals());
+                        String render = asciiTable.render();
+                        out.println(render);
 
                     } catch (RequestException e) {
                         throw new RuntimeException(e);
@@ -502,16 +688,6 @@ public class App {
 
                 case "3" -> {
                     var worker = new WorkerDto();
-
-                    /*out.println("Enter Transaction ID:");
-                    int transactionId = Integer.parseInt(readLine(in));
-                    var transaction = new TransactionDto();
-                    transaction.setId(transactionId);
-
-                    // Create a Set and add the transaction to it
-                    Set<Transaction> transactions = new HashSet<>();
-                    transactions.add(transaction);
-                    worker.setTransaction(transactions);*/
 
                     out.println("Enter first name:");
                     worker.setFirstName(readLine(in));
@@ -532,11 +708,6 @@ public class App {
                     var workerId = readLine(in);
                     var worker = restClient.get("/worker/" + workerId, WorkerDto.class);
 
-                    /*out.println("Enter Transaction ID:");
-                    int transactionId = Integer.parseInt(readLine(in));
-                    var transaction = new TransactionDto();
-                    transaction.setId(transactionId);
-                    worker.setTransaction(Set.of(transaction));*/
 
                     out.println("Enter first name:");
                     worker.setFirstName(readLine(in));

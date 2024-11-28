@@ -15,6 +15,7 @@ dependencies {
     implementation("com.athaydes.rawhttp:rawhttp-core:2.6.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
+    implementation("de.vandermeer:asciitable:0.3.2")
 }
 
 application {
