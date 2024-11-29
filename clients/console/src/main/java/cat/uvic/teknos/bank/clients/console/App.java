@@ -332,13 +332,12 @@ public class App {
                         // Initialize AsciiTable and configure it
                         var asciiTable = new AsciiTable();
                         asciiTable.addRule();
-                        asciiTable.addRow("Loan ID", "Customer ID", "Loan Date", "Return Date");
+                        asciiTable.addRow("Loan ID", "Loan Date", "Return Date");
                         asciiTable.addRule(TableRowStyle.STRONG);
 
                         // Add loan data to the table
                         for (LoanDto loan : loans) {
                             asciiTable.addRow(
-                                    loan.getId(),  // Assuming LoanDto has an `getId()` method for Loan ID
                                     loan.getCustomer().getId(),
                                     loan.getLoanDate(),
                                     loan.getReturnDate()
@@ -367,7 +366,7 @@ public class App {
                         // Initialize AsciiTable and configure it
                         var asciiTable = new AsciiTable();
                         asciiTable.addRule();
-                        asciiTable.addRow("Loan ID (Customer ID)", "Loan Date", "Return Date");
+                        asciiTable.addRow("Loan ID", "Loan Date", "Return Date");
                         asciiTable.addRule(TableRowStyle.STRONG);
 
                         // Add the loan data to the table

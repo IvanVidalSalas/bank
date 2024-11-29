@@ -101,7 +101,6 @@ public class Server {
     }
 
     private void shutdown() {
-
         try {
             threadPool.shutdownNow();
             scheduler.shutdownNow();

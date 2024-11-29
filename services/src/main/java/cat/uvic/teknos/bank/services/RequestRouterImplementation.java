@@ -11,6 +11,15 @@ import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
 import rawhttp.core.RawHttpResponse;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.security.KeyStore;
 import java.util.Map;
 
 public class RequestRouterImplementation implements RequestRouter {
@@ -237,5 +246,71 @@ public class RequestRouterImplementation implements RequestRouter {
 
         return responseJsonBody;
     }
+
+    /*public static void startSecureServer() {
+        try {
+            // Load the keystore with server certificate and private key
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            try (FileInputStream keyStoreStream = new FileInputStream("path/to/keystore.p12")) {
+                keyStore.load(keyStoreStream, "keystore-password".toCharArray());
+            }
+
+            // Initialize KeyManagerFactory and TrustManagerFactory
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            kmf.init(keyStore, "key-password".toCharArray());
+
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(keyStore);
+
+            // Create SSLContext with the loaded certificates
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+
+            // Create SSLServerSocketFactory from SSLContext
+            SSLServerSocketFactory factory = sslContext.getServerSocketFactory();
+
+            // Start an SSL server socket (port 8443 for HTTPS)
+            ServerSocket serverSocket = factory.createServerSocket(8443);
+            System.out.println("Secure server listening on port 8443...");
+
+            while (true) {
+                Socket socket = serverSocket.accept();
+                // Handle the incoming request in a separate thread
+                new Thread(new SecureRequestHandler(socket, controllers)).start();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions during SSL setup
+        }
+    }
+
+    // SecureRequestHandler class processes the requests using RawHttp and RequestRouterImplementation
+    private static class SecureRequestHandler implements Runnable {
+        private final Socket socket;
+        private final Map<String, Controller> controllers;
+
+        public SecureRequestHandler(Socket socket, Map<String, Controller> controllers) {
+            this.socket = socket;
+            this.controllers = controllers;
+        }
+
+        @Override
+        public void run() {
+            try {
+                // Handle the request and response using RawHttp
+                RawHttpRequest request = new RawHttpRequest(socket.getInputStream());
+                RawHttpResponse<?> response = new RequestRouterImplementation(controllers).execRequest(request);
+
+                // Send the response back to the client
+                response.writeTo(socket.getOutputStream());
+
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
+
 
 }

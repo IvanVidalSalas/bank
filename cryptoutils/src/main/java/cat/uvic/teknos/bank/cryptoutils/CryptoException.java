@@ -21,3 +21,8 @@ public class CryptoException extends RuntimeException {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 }
+
+
+
+// keytool -list -v -keystore client1.p12 -storepass Teknos01. resources services
+// keytool -list -v -keystore server.p12 -storepass Teknos01. resources client
