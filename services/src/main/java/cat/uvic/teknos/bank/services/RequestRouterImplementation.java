@@ -1,99 +1,140 @@
 package cat.uvic.teknos.bank.services;
 
-import cat.uvic.teknos.bank.models.Customer;
+import cat.uvic.teknos.bank.cryptoutils.CryptoUtils;
 import cat.uvic.teknos.bank.services.controllers.Controller;
-import cat.uvic.teknos.bank.services.controllers.CustomerController;
 import cat.uvic.teknos.bank.services.exception.ResourceNotFoundException;
 import cat.uvic.teknos.bank.services.exception.ServerErrorException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
 import rawhttp.core.RawHttpResponse;
 
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import javax.crypto.SecretKey;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
+import java.security.PrivateKey;
 import java.util.Map;
 
 public class RequestRouterImplementation implements RequestRouter {
-    private static RawHttp rawHttp = new RawHttp();
+    private static final RawHttp rawHttp = new RawHttp();
     private final Map<String, Controller> controllers;
+    private static final String KEYSTORE_PATH = "/server.p12";
+    private static final String KEYSTORE_PASSWORD = "Teknos01.";
+    private static final String KEY_ALIAS = "server";
+    private final PrivateKey serverPrivateKey;
 
-    public RequestRouterImplementation(Map<String, Controller> controllers){
+    public RequestRouterImplementation(Map<String, Controller> controllers) {
         this.controllers = controllers;
+
+        try {
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            try (InputStream keyStoreStream = getClass().getResourceAsStream(KEYSTORE_PATH)) {
+                if (keyStoreStream == null) {
+                    throw new FileNotFoundException("Keystore file not found in classpath: " + KEYSTORE_PATH);
+                }
+                keyStore.load(keyStoreStream, KEYSTORE_PASSWORD.toCharArray());
+            }
+
+            serverPrivateKey = (PrivateKey) keyStore.getKey(KEY_ALIAS, KEYSTORE_PASSWORD.toCharArray());
+
+            if (serverPrivateKey == null) {
+                throw new RuntimeException("Failed to load private key from keystore.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error loading server keystore: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public RawHttpResponse<?> execRequest(RawHttpRequest request) {
-
-        var path = request.getUri().getPath();
-        var pathParts = path.split("/");
-        var method = request.getMethod();
-        var controllerName = pathParts[1];
-        var responseJsonBody = "";
+        String path = request.getUri().getPath();
+        String[] pathParts = path.split("/");
+        String method = request.getMethod();
+        String controllerName;
+        String responseJsonBody = "";
         RawHttpResponse<?> response;
 
         try {
+
+            controllerName = pathParts[1];
+
+            // Extract encrypted symmetric key
+            String encryptedSymmetricKeyBase64 = request.getHeaders().getFirst("Symmetric-Key")
+                    .orElseThrow(() -> new ServerErrorException("Missing Symmetric-Key header"));
+
+            // Decrypt symmetric key
+            String symmetricKeyBase64 = CryptoUtils.asymmetricDecrypt(encryptedSymmetricKeyBase64, serverPrivateKey);
+            SecretKey symmetricKey = CryptoUtils.decodeSecretKey(symmetricKeyBase64);
+
+            // Validate and decrypt the request body
+            String requestBody = request.getBody().map(body -> {
+                try {
+                    String encryptedBody = new String(body.asRawBytes(), StandardCharsets.UTF_8);
+
+                    // Validate hash
+                    String bodyHash = request.getHeaders().getFirst("Body-Hash")
+                            .orElseThrow(() -> new ServerErrorException("Missing Body-Hash header"));
+                    String calculatedHash = CryptoUtils.getHash(encryptedBody);
+                    if (!calculatedHash.equals(bodyHash)) {
+                        throw new ServerErrorException("Body hash mismatch");
+                    }
+
+                    // Decrypt body if not empty
+                    return encryptedBody.isEmpty() ? "" : CryptoUtils.decrypt(encryptedBody, symmetricKey);
+                } catch (Exception e) {
+                    throw new ServerErrorException("Error decrypting request body", e);
+                }
+            }).orElse("");
+
             switch (controllerName) {
                 case "customer":
-                    responseJsonBody = manageCustomers(request, method, pathParts, responseJsonBody);
+                    responseJsonBody = manageCustomers(request, method, pathParts, requestBody);
                     break;
                 case "loan":
-                    responseJsonBody = manageLoans(request, method, pathParts, responseJsonBody);
+                    responseJsonBody = manageLoans(request, method, pathParts, requestBody);
                     break;
                 case "account":
-                    responseJsonBody = manageAccounts(request, method, pathParts, responseJsonBody);
+                    responseJsonBody = manageAccounts(request, method, pathParts, requestBody);
                     break;
                 case "worker":
-                    responseJsonBody = manageWorkers(request, method, pathParts, responseJsonBody);
+                    responseJsonBody = manageWorkers(request, method, pathParts, requestBody);
                     break;
                 case "transaction":
-                    responseJsonBody = manageTransactions(request, method, pathParts, responseJsonBody);
+                    responseJsonBody = manageTransactions(request, method, pathParts, requestBody);
                     break;
                 default:
                     throw new ResourceNotFoundException("Unknown controller: " + controllerName);
             }
-        } catch (ResourceNotFoundException e) {
-            response = rawHttp.parseResponse("HTTP/1.1 404 Not Found\r\n" +
-                    "Content-Type: application/json\r\n" +
-                    "Content-Length: 0\r\n" +
-                    "\r\n");
-            return response;
-        } catch (ServerErrorException e) {
-            response = rawHttp.parseResponse("HTTP/1.1 500 Internal Server Error\r\n" +
-                    "Content-Type: application/json\r\n" +
-                    "Content-Length: 0\r\n" +
-                    "\r\n");
-            return response;
-        } catch (Exception e) {
-            e.printStackTrace(); // log the error for debugging
-            response = rawHttp.parseResponse("HTTP/1.1 500 Internal Server Error\r\n" +
-                    "Content-Type: application/json\r\n" +
-                    "Content-Length: 0\r\n" +
-                    "\r\n");
-            return response;
-        }
-        try {
+
+            String encryptedResponseBody = CryptoUtils.encrypt(responseJsonBody, symmetricKey);
+
             return rawHttp.parseResponse("HTTP/1.1 200 OK\r\n" +
                     "Content-Type: application/json\r\n" +
-                    "Content-Length: " + responseJsonBody.length() + "\r\n" +
+                    "Content-Length: " + encryptedResponseBody.length() + "\r\n" +
                     "\r\n" +
-                    responseJsonBody);
+                    encryptedResponseBody);
+
+        } catch (ResourceNotFoundException e) {
+            return rawHttp.parseResponse("HTTP/1.1 404 Not Found\r\n" +
+                    "Content-Type: application/json\r\n" +
+                    "Content-Length: 0\r\n" +
+                    "\r\n");
+        } catch (ServerErrorException e) {
+            return rawHttp.parseResponse("HTTP/1.1 500 Internal Server Error\r\n" +
+                    "Content-Type: application/json\r\n" +
+                    "Content-Length: 0\r\n" +
+                    "\r\n");
         } catch (Exception e) {
-            e.printStackTrace(); // log the error for debugging
+            e.printStackTrace();
             return rawHttp.parseResponse("HTTP/1.1 500 Internal Server Error\r\n" +
                     "Content-Type: application/json\r\n" +
                     "Content-Length: 0\r\n" +
                     "\r\n");
         }
     }
+
 
     private String manageCustomers(RawHttpRequest request, String method, String[] pathParts, String responseJsonBody) {
 
@@ -246,71 +287,5 @@ public class RequestRouterImplementation implements RequestRouter {
 
         return responseJsonBody;
     }
-
-    /*public static void startSecureServer() {
-        try {
-            // Load the keystore with server certificate and private key
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            try (FileInputStream keyStoreStream = new FileInputStream("path/to/keystore.p12")) {
-                keyStore.load(keyStoreStream, "keystore-password".toCharArray());
-            }
-
-            // Initialize KeyManagerFactory and TrustManagerFactory
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            kmf.init(keyStore, "key-password".toCharArray());
-
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            tmf.init(keyStore);
-
-            // Create SSLContext with the loaded certificates
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-
-            // Create SSLServerSocketFactory from SSLContext
-            SSLServerSocketFactory factory = sslContext.getServerSocketFactory();
-
-            // Start an SSL server socket (port 8443 for HTTPS)
-            ServerSocket serverSocket = factory.createServerSocket(8443);
-            System.out.println("Secure server listening on port 8443...");
-
-            while (true) {
-                Socket socket = serverSocket.accept();
-                // Handle the incoming request in a separate thread
-                new Thread(new SecureRequestHandler(socket, controllers)).start();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Handle exceptions during SSL setup
-        }
-    }
-
-    // SecureRequestHandler class processes the requests using RawHttp and RequestRouterImplementation
-    private static class SecureRequestHandler implements Runnable {
-        private final Socket socket;
-        private final Map<String, Controller> controllers;
-
-        public SecureRequestHandler(Socket socket, Map<String, Controller> controllers) {
-            this.socket = socket;
-            this.controllers = controllers;
-        }
-
-        @Override
-        public void run() {
-            try {
-                // Handle the request and response using RawHttp
-                RawHttpRequest request = new RawHttpRequest(socket.getInputStream());
-                RawHttpResponse<?> response = new RequestRouterImplementation(controllers).execRequest(request);
-
-                // Send the response back to the client
-                response.writeTo(socket.getOutputStream());
-
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
-
 
 }
